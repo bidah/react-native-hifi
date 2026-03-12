@@ -115,6 +115,22 @@ Start a new session in your chosen platform and ask for something that should tr
 - **use-dom** - Use the `use dom` directive for web components in React Native
 - **agent-device** - Connect your coding agent to a physical or virtual device for testing
 
+### React Native Best Practices (Software Mansion)
+
+Production-grade patterns and guides from [software-mansion-labs/skills](https://github.com/software-mansion-labs/skills).
+
+- **react-native-best-practices** - Production patterns for React Native apps (routing table for sub-skills)
+  - **animations** - Reanimated 4, CSS transitions, layout animations, 120fps performance
+  - **gestures** - Gesture Handler composition, tap handling, Reanimated patterns
+  - **svg** - react-native-svg usage, animation patterns, decision guides
+  - **audio** - AudioContext, buffer management, visualizations, session handling
+  - **rich-text** - react-native-enriched formatting, mentions, links
+  - **on-device-ai** - React Native ExecuTorch: LLMs, computer vision, audio, NLP, OCR
+  - **radon-mcp** - Radon IDE MCP tools for debugging, logs, screenshots, component trees
+  - **haptics** - Haptic feedback patterns (stub)
+  - **multimedia** - Media handling (stub)
+  - **multithreading** - Threading patterns (stub)
+
 ### Meta
 
 - **writing-skills** - Create new skills following best practices
