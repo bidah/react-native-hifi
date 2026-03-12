@@ -7,7 +7,7 @@ Complete guide for using React Native Space with [OpenCode.ai](https://opencode.
 Tell OpenCode:
 
 ```
-Clone https://github.com/rofi-rofi/react-native-space to ~/.config/opencode/react-native-space, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/react-native-space/.opencode/plugins/react-native-space.js to ~/.config/opencode/plugins/react-native-space.js, then symlink ~/.config/opencode/react-native-space/skills to ~/.config/opencode/skills/react-native-space, then restart opencode.
+Clone https://github.com/react-native-vibe-code/react-native-space to ~/.config/opencode/react-native-space, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/react-native-space/.opencode/plugins/react-native-space.js to ~/.config/opencode/plugins/react-native-space.js, then symlink ~/.config/opencode/react-native-space/skills to ~/.config/opencode/skills/react-native-space, then restart opencode.
 ```
 
 ## Manual Installation
@@ -24,7 +24,7 @@ Clone https://github.com/rofi-rofi/react-native-space to ~/.config/opencode/reac
 if [ -d ~/.config/opencode/react-native-space ]; then
   cd ~/.config/opencode/react-native-space && git pull
 else
-  git clone https://github.com/rofi-rofi/react-native-space.git ~/.config/opencode/react-native-space
+  git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.config/opencode/react-native-space
 fi
 
 # 2. Create directories
@@ -66,7 +66,7 @@ Run as Administrator, or with Developer Mode enabled:
 
 ```cmd
 :: 1. Install React Native Space
-git clone https://github.com/rofi-rofi/react-native-space.git "%USERPROFILE%\.config\opencode\react-native-space"
+git clone https://github.com/react-native-vibe-code/react-native-space.git "%USERPROFILE%\.config\opencode\react-native-space"
 
 :: 2. Create directories
 mkdir "%USERPROFILE%\.config\opencode\plugins" 2>nul
@@ -91,7 +91,7 @@ Run as Administrator, or with Developer Mode enabled:
 
 ```powershell
 # 1. Install React Native Space
-git clone https://github.com/rofi-rofi/react-native-space.git "$env:USERPROFILE\.config\opencode\react-native-space"
+git clone https://github.com/react-native-vibe-code/react-native-space.git "$env:USERPROFILE\.config\opencode\react-native-space"
 
 # 2. Create directories
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.config\opencode\plugins"
@@ -116,7 +116,7 @@ Note: Git Bash's native `ln` command copies files instead of creating symlinks. 
 
 ```bash
 # 1. Install React Native Space
-git clone https://github.com/rofi-rofi/react-native-space.git ~/.config/opencode/react-native-space
+git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.config/opencode/react-native-space
 
 # 2. Create directories
 mkdir -p ~/.config/opencode/plugins ~/.config/opencode/skills
@@ -308,8 +308,8 @@ If you see `Cannot find module` errors on Windows:
 
 ## Getting Help
 
-- Report issues: https://github.com/rofi-rofi/react-native-space/issues
-- Main documentation: https://github.com/rofi-rofi/react-native-space
+- Report issues: https://github.com/react-native-vibe-code/react-native-space/issues
+- Main documentation: https://github.com/react-native-vibe-code/react-native-space
 - OpenCode docs: https://opencode.ai/docs/
 
 ## Testing

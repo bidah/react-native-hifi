@@ -21,7 +21,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/r
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/rofi-rofi/react-native-space.git ~/.codex/react-native-space
+   git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.codex/react-native-space
    ```
 
 2. Create the skills symlink:
@@ -122,5 +122,5 @@ Junctions normally work without special permissions. If creation fails, try runn
 
 ## Getting Help
 
-- Report issues: https://github.com/rofi-rofi/react-native-space/issues
-- Main documentation: https://github.com/rofi-rofi/react-native-space
+- Report issues: https://github.com/react-native-vibe-code/react-native-space/issues
+- Main documentation: https://github.com/react-native-vibe-code/react-native-space

@@ -67,7 +67,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/r
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/rofi-rofi/react-native-space
+gemini extensions install https://github.com/react-native-vibe-code/react-native-space
 ```
 
 To update:

@@ -780,7 +780,7 @@ git commit -m "feat: implement session.started hook for opencode"
 ```bash
 # Clone react-native-space skills to OpenCode config directory
 mkdir -p ~/.config/opencode/react-native-space
-git clone https://github.com/obra/react-native-space.git ~/.config/opencode/react-native-space
+git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.config/opencode/react-native-space
 ```
 
 ### 2. Install the Plugin
@@ -878,8 +878,8 @@ When a skill references a Claude Code tool you don't have:
 
 ## Getting Help
 
-- Report issues: https://github.com/obra/react-native-space/issues
-- Documentation: https://github.com/obra/react-native-space
+- Report issues: https://github.com/react-native-vibe-code/react-native-space/issues
+- Documentation: https://github.com/react-native-vibe-code/react-native-space
 ```
 
 **Step 2: Verify file created**

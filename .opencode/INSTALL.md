@@ -10,7 +10,7 @@
 ### 1. Clone React Native Space
 
 ```bash
-git clone https://github.com/obra/react-native-space.git ~/.config/opencode/react-native-space
+git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.config/opencode/react-native-space
 ```
 
 ### 2. Register the Plugin
@@ -115,5 +115,5 @@ When skills reference Claude Code tools:
 
 ## Getting Help
 
-- Report issues: https://github.com/obra/react-native-space/issues
-- Full documentation: https://github.com/obra/react-native-space/blob/main/docs/README.opencode.md
+- Report issues: https://github.com/react-native-vibe-code/react-native-space/issues
+- Full documentation: https://github.com/react-native-vibe-code/react-native-space/blob/main/docs/README.opencode.md

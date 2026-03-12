@@ -6,8 +6,8 @@
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
   },
-  "homepage": "https://github.com/obra/react-native-space",
-  "repository": "https://github.com/obra/react-native-space",
+  "homepage": "https://github.com/react-native-vibe-code/react-native-space",
+  "repository": "https://github.com/react-native-vibe-code/react-native-space",
   "license": "MIT",
   "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows", "react-native", "expo"]
 }

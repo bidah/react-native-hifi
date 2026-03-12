@@ -10,7 +10,7 @@ Enable react-native-space skills in Codex via native skill discovery. Just clone
 
 1. **Clone the react-native-space repository:**
    ```bash
-   git clone https://github.com/obra/react-native-space.git ~/.codex/react-native-space
+   git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.codex/react-native-space
    ```
 
 2. **Create the skills symlink:**
