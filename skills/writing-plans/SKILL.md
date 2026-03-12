@@ -15,7 +15,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Context:** This should be run in a dedicated worktree (created by brainstorming skill).
 
-**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
+**Save plans to:** `docs/react-native-space/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
 
 ## Scope Check
@@ -49,7 +49,7 @@ This structure informs the task decomposition. Each task should produce self-con
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED: Use react-native-space:subagent-driven-development (if subagents available) or react-native-space:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** [One sentence describing what this builds]
 
@@ -133,15 +133,15 @@ After completing each chunk of the plan:
 
 After saving the plan:
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Ready to execute?"**
+**"Plan complete and saved to `docs/react-native-space/plans/<filename>.md`. Ready to execute?"**
 
 **Execution path depends on harness capabilities:**
 
 **If harness has subagents (Claude Code, etc.):**
-- **REQUIRED:** Use superpowers:subagent-driven-development
+- **REQUIRED:** Use react-native-space:subagent-driven-development
 - Do NOT offer a choice - subagent-driven is the standard approach
 - Fresh subagent per task + two-stage review
 
 **If harness does NOT have subagents:**
-- Execute plan in current session using superpowers:executing-plans
+- Execute plan in current session using react-native-space:executing-plans
 - Batch execution with checkpoints for review

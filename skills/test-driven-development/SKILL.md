@@ -3,7 +3,7 @@ name: test-driven-development
 description: Use when implementing any feature or bugfix, before writing implementation code
 ---
 
-# Test-Driven Development (TDD)
+# Test-Driven Development (TDD) for React Native
 
 ## Overview
 
@@ -12,6 +12,16 @@ Write the test first. Watch it fail. Write minimal code to pass.
 **Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
+
+## Testing Stack
+
+- **Test runner:** Jest (standard for React Native / Expo)
+- **Component testing:** `@testing-library/react-native` (React Native Testing Library)
+  - `render`, `screen` — render components and query the output
+  - `fireEvent`, `userEvent` — simulate user interactions
+  - `waitFor`, `findBy*` queries — handle async state updates
+  - `renderHook` — test custom hooks in isolation
+- **Assertions:** Jest matchers + `@testing-library/jest-native` extended matchers
 
 ## When to Use
 
@@ -74,48 +84,36 @@ Write one minimal test showing what should happen.
 
 <Good>
 ```typescript
-test('retries failed operations 3 times', async () => {
-  let attempts = 0;
-  const operation = () => {
-    attempts++;
-    if (attempts < 3) throw new Error('fail');
-    return 'success';
-  };
+test('displays welcome message with user name', () => {
+  render(<WelcomeScreen userName="Alice" />);
 
-  const result = await retryOperation(operation);
-
-  expect(result).toBe('success');
-  expect(attempts).toBe(3);
+  expect(screen.getByText('Welcome, Alice!')).toBeOnTheScreen();
 });
 ```
-Clear name, tests real behavior, one thing
+Clear name, tests user-visible behavior, one thing
 </Good>
 
 <Bad>
 ```typescript
-test('retry works', async () => {
-  const mock = jest.fn()
-    .mockRejectedValueOnce(new Error())
-    .mockRejectedValueOnce(new Error())
-    .mockResolvedValueOnce('success');
-  await retryOperation(mock);
-  expect(mock).toHaveBeenCalledTimes(3);
+test('component works', () => {
+  const { root } = render(<WelcomeScreen userName="Alice" />);
+  expect(root.props.userName).toBe('Alice');
 });
 ```
-Vague name, tests mock not code
+Vague name, tests props/internals instead of rendered output
 </Bad>
 
 **Requirements:**
 - One behavior
 - Clear name
-- Real code (no mocks unless unavoidable)
+- Test what the user sees and interacts with (not implementation details)
 
 ### Verify RED - Watch It Fail
 
 **MANDATORY. Never skip.**
 
 ```bash
-npm test path/to/test.test.ts
+npx jest path/to/component.test.tsx
 ```
 
 Confirm:
@@ -133,15 +131,12 @@ Write simplest code to pass the test.
 
 <Good>
 ```typescript
-async function retryOperation<T>(fn: () => Promise<T>): Promise<T> {
-  for (let i = 0; i < 3; i++) {
-    try {
-      return await fn();
-    } catch (e) {
-      if (i === 2) throw e;
-    }
-  }
-  throw new Error('unreachable');
+function WelcomeScreen({ userName }: { userName: string }) {
+  return (
+    <View>
+      <Text>Welcome, {userName}!</Text>
+    </View>
+  );
 }
 ```
 Just enough to pass
@@ -149,15 +144,14 @@ Just enough to pass
 
 <Bad>
 ```typescript
-async function retryOperation<T>(
-  fn: () => Promise<T>,
-  options?: {
-    maxRetries?: number;
-    backoff?: 'linear' | 'exponential';
-    onRetry?: (attempt: number) => void;
-  }
-): Promise<T> {
-  // YAGNI
+function WelcomeScreen({
+  userName,
+  theme,
+  onDismiss,
+  animationConfig,
+  analyticsTracker,
+}: WelcomeScreenProps) {
+  // YAGNI - none of this is tested yet
 }
 ```
 Over-engineered
@@ -170,7 +164,7 @@ Don't add features, refactor other code, or "improve" beyond the test.
 **MANDATORY.**
 
 ```bash
-npm test path/to/test.test.ts
+npx jest path/to/component.test.tsx
 ```
 
 Confirm:
@@ -187,13 +181,156 @@ Confirm:
 After green only:
 - Remove duplication
 - Improve names
-- Extract helpers
+- Extract helpers / shared components
 
 Keep tests green. Don't add behavior.
 
 ### Repeat
 
 Next failing test for next feature.
+
+## React Native Testing Patterns
+
+### Testing Component Rendering
+
+```typescript
+import { render, screen } from '@testing-library/react-native';
+
+test('shows error message when validation fails', () => {
+  render(<LoginForm errors={{ email: 'Invalid email' }} />);
+
+  expect(screen.getByText('Invalid email')).toBeOnTheScreen();
+});
+```
+
+### Testing User Interactions
+
+```typescript
+import { render, screen, userEvent } from '@testing-library/react-native';
+
+test('calls onSubmit with email when button pressed', async () => {
+  const user = userEvent.setup();
+  const onSubmit = jest.fn();
+  render(<LoginForm onSubmit={onSubmit} />);
+
+  await user.type(screen.getByPlaceholderText('Email'), 'alice@example.com');
+  await user.press(screen.getByRole('button', { name: 'Sign In' }));
+
+  expect(onSubmit).toHaveBeenCalledWith({ email: 'alice@example.com' });
+});
+```
+
+### Testing Async Operations
+
+```typescript
+import { render, screen, waitFor } from '@testing-library/react-native';
+
+test('displays profile data after loading', async () => {
+  render(<ProfileScreen userId="123" />);
+
+  expect(screen.getByText('Loading...')).toBeOnTheScreen();
+
+  // waitFor retries until assertion passes or times out
+  await waitFor(() => {
+    expect(screen.getByText('Alice Johnson')).toBeOnTheScreen();
+  });
+
+  expect(screen.queryByText('Loading...')).not.toBeOnTheScreen();
+});
+
+// Or use findBy* queries (built-in waitFor):
+test('displays profile data after loading', async () => {
+  render(<ProfileScreen userId="123" />);
+
+  const name = await screen.findByText('Alice Johnson');
+  expect(name).toBeOnTheScreen();
+});
+```
+
+### Testing Custom Hooks
+
+```typescript
+import { renderHook, waitFor } from '@testing-library/react-native';
+
+test('useCounter increments count', () => {
+  const { result } = renderHook(() => useCounter(0));
+
+  expect(result.current.count).toBe(0);
+
+  act(() => {
+    result.current.increment();
+  });
+
+  expect(result.current.count).toBe(1);
+});
+
+test('useFetchUser returns user data', async () => {
+  const { result } = renderHook(() => useFetchUser('123'));
+
+  await waitFor(() => {
+    expect(result.current.data).toEqual({ id: '123', name: 'Alice' });
+  });
+});
+```
+
+### Testing Navigation (Expo Router)
+
+```typescript
+import { render, screen, userEvent } from '@testing-library/react-native';
+import { useRouter } from 'expo-router';
+
+jest.mock('expo-router', () => ({
+  useRouter: jest.fn(),
+}));
+
+test('navigates to details on item press', async () => {
+  const push = jest.fn();
+  (useRouter as jest.Mock).mockReturnValue({ push });
+  const user = userEvent.setup();
+
+  render(<ItemList items={[{ id: '1', title: 'Item 1' }]} />);
+
+  await user.press(screen.getByText('Item 1'));
+
+  expect(push).toHaveBeenCalledWith('/items/1');
+});
+```
+
+### Testing with Providers (Context, State)
+
+```typescript
+function renderWithProviders(ui: React.ReactElement) {
+  return render(
+    <ThemeProvider>
+      <AuthProvider>
+        {ui}
+      </AuthProvider>
+    </ThemeProvider>
+  );
+}
+
+test('shows logout button when authenticated', () => {
+  // Mock auth state or provide test values
+  renderWithProviders(<SettingsScreen />);
+
+  expect(screen.getByRole('button', { name: 'Log Out' })).toBeOnTheScreen();
+});
+```
+
+## Query Priority
+
+Prefer queries that reflect how users find elements:
+
+| Priority | Query | Use For |
+|----------|-------|---------|
+| 1st | `getByRole` | Buttons, headings, text inputs |
+| 2nd | `getByText` | Static text content |
+| 3rd | `getByPlaceholderText` | Text inputs |
+| 4th | `getByDisplayValue` | Filled inputs |
+| 5th | `getByLabelText` | Labeled form elements |
+| Last | `getByTestID` | Only when no semantic query works |
+
+`getByTestID` is a last resort. If you reach for it first, rethink your component's accessibility.
 
 ## Good Tests
 
@@ -202,6 +339,7 @@ Next failing test for next feature.
 | **Minimal** | One thing. "and" in name? Split it. | `test('validates email and domain and whitespace')` |
 | **Clear** | Name describes behavior | `test('test1')` |
 | **Shows intent** | Demonstrates desired API | Obscures what code should do |
+| **User-centric** | Tests what user sees/does | Tests component internals or state |
 
 ## Why Order Matters
 
@@ -221,7 +359,7 @@ Manual testing is ad-hoc. You think you tested everything but:
 - No record of what you tested
 - Can't re-run when code changes
 - Easy to forget cases under pressure
-- "It worked when I tried it" ≠ comprehensive
+- "It worked when I tried it" does not equal comprehensive
 
 Automated tests are systematic. They run the same way every time.
 
@@ -251,7 +389,7 @@ Tests-after are biased by your implementation. You test what you built, not what
 
 Tests-first force edge case discovery before implementing. Tests-after verify you remembered everything (you didn't).
 
-30 minutes of tests after ≠ TDD. You get coverage, lose proof tests work.
+30 minutes of tests after does not equal TDD. You get coverage, lose proof tests work.
 
 ## Common Rationalizations
 
@@ -260,7 +398,7 @@ Tests-first force edge case discovery before implementing. Tests-after verify yo
 | "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
 | "I'll test after" | Tests passing immediately prove nothing. |
 | "Tests after achieve same goals" | Tests-after = "what does this do?" Tests-first = "what should this do?" |
-| "Already manually tested" | Ad-hoc ≠ systematic. No record, can't re-run. |
+| "Already manually tested" | Ad-hoc does not equal systematic. No record, can't re-run. |
 | "Deleting X hours is wasteful" | Sunk cost fallacy. Keeping unverified code is technical debt. |
 | "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
 | "Need to explore first" | Fine. Throw away exploration, start with TDD. |
@@ -268,6 +406,7 @@ Tests-first force edge case discovery before implementing. Tests-after verify yo
 | "TDD will slow me down" | TDD faster than debugging. Pragmatic = test-first. |
 | "Manual test faster" | Manual doesn't prove edge cases. You'll re-test every change. |
 | "Existing code has no tests" | You're improving it. Add tests for existing code. |
+| "React Native is hard to test" | React Native Testing Library makes it straightforward. No excuses. |
 
 ## Red Flags - STOP and Start Over
 
@@ -284,57 +423,80 @@ Tests-first force edge case discovery before implementing. Tests-after verify yo
 - "Already spent X hours, deleting is wasteful"
 - "TDD is dogmatic, I'm being pragmatic"
 - "This is different because..."
+- Testing component state directly instead of rendered output
+- Reaching for `getByTestID` before trying semantic queries
 
 **All of these mean: Delete code. Start over with TDD.**
 
-## Example: Bug Fix
+## Example: Bug Fix (React Native)
 
-**Bug:** Empty email accepted
+**Bug:** Empty email accepted in login form
 
 **RED**
 ```typescript
-test('rejects empty email', async () => {
-  const result = await submitForm({ email: '' });
-  expect(result.error).toBe('Email required');
+test('shows error when email is empty and submit pressed', async () => {
+  const user = userEvent.setup();
+  render(<LoginForm />);
+
+  await user.press(screen.getByRole('button', { name: 'Sign In' }));
+
+  expect(screen.getByText('Email required')).toBeOnTheScreen();
 });
 ```
 
 **Verify RED**
 ```bash
-$ npm test
-FAIL: expected 'Email required', got undefined
+$ npx jest LoginForm.test.tsx
+FAIL: Unable to find an element with text: Email required
 ```
 
 **GREEN**
 ```typescript
-function submitForm(data: FormData) {
-  if (!data.email?.trim()) {
-    return { error: 'Email required' };
-  }
-  // ...
+function LoginForm() {
+  const [error, setError] = useState('');
+
+  const handleSubmit = (email: string) => {
+    if (!email?.trim()) {
+      setError('Email required');
+      return;
+    }
+    // ...
+  };
+
+  return (
+    <View>
+      <TextInput placeholder="Email" onChangeText={setEmail} />
+      {error ? <Text>{error}</Text> : null}
+      <Pressable role="button" accessibilityLabel="Sign In" onPress={() => handleSubmit(email)}>
+        <Text>Sign In</Text>
+      </Pressable>
+    </View>
+  );
 }
 ```
 
 **Verify GREEN**
 ```bash
-$ npm test
+$ npx jest LoginForm.test.tsx
 PASS
 ```
 
 **REFACTOR**
-Extract validation for multiple fields if needed.
+Extract validation logic, add accessibility labels if missing.
 
 ## Verification Checklist
 
 Before marking work complete:
 
-- [ ] Every new function/method has a test
+- [ ] Every new function/method/component has a test
 - [ ] Watched each test fail before implementing
 - [ ] Each test failed for expected reason (feature missing, not typo)
 - [ ] Wrote minimal code to pass each test
 - [ ] All tests pass
-- [ ] Output pristine (no errors, warnings)
-- [ ] Tests use real code (mocks only if unavoidable)
+- [ ] Output pristine (no errors, warnings, act() warnings)
+- [ ] Tests use real components where possible (mocks only if unavoidable)
+- [ ] Tests query by user-visible attributes (role, text, placeholder), not testID
+- [ ] Async operations use `waitFor` or `findBy*` (no arbitrary delays)
 - [ ] Edge cases and errors covered
 
 Can't check all boxes? You skipped TDD. Start over.
@@ -346,7 +508,10 @@ Can't check all boxes? You skipped TDD. Start over.
 | Don't know how to test | Write wished-for API. Write assertion first. Ask your human partner. |
 | Test too complicated | Design too complicated. Simplify interface. |
 | Must mock everything | Code too coupled. Use dependency injection. |
-| Test setup huge | Extract helpers. Still complex? Simplify design. |
+| Test setup huge | Extract render helpers with providers. Still complex? Simplify design. |
+| `act()` warnings | Wrap state updates in `act()`, or use `waitFor`/`findBy*` queries. |
+| Native module errors | Mock the native module in `jest.setup.js` or per-test. |
+| Navigation hard to test | Mock `expo-router` hooks (`useRouter`, `useLocalSearchParams`). |
 
 ## Debugging Integration
 
@@ -360,12 +525,15 @@ When adding mocks or test utilities, read @testing-anti-patterns.md to avoid com
 - Testing mock behavior instead of real behavior
 - Adding test-only methods to production classes
 - Mocking without understanding dependencies
+- Testing implementation details instead of user-visible behavior
+- Snapshot testing overuse (prefer behavioral assertions)
+- Not using `waitFor` for async state updates
 
 ## Final Rule
 
 ```
-Production code → test exists and failed first
-Otherwise → not TDD
+Production code -> test exists and failed first
+Otherwise -> not TDD
 ```
 
 No exceptions without your human partner's permission.
