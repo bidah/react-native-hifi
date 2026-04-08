@@ -1,7 +1,7 @@
 {
   "name": "react-native-hifi",
   "description": "React Native & Expo development workflow: skills library for Claude Code with TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "5.2.0",
+  "version": "0.0.1",
   "author": {
     "name": "Rodrigo Figueroa",
     "url": "https://github.com/bidah"
