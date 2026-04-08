@@ -453,12 +453,24 @@ queryClient.cancelQueries({ queryKey: ['search'] });
 queryClient.cancelQueries({ queryKey: ['search', 'react native'] });
 ```
 
-## On-Device Storage with react-native-mmkv
+## On-Device Storage
 
-Use `react-native-mmkv` instead of AsyncStorage for on-device key-value storage. MMKV is synchronous, ~30x faster, and built on WeChat's battle-tested C++ library.
+When the project needs key-value storage, ask the user which option fits their setup:
+
+| Option | Pros | Cons | Requires Prebuild? |
+|--------|------|------|--------------------|
+| **react-native-mmkv** (recommended) | Synchronous API, ~30x faster than AsyncStorage, encryption support, Zustand integration | Requires native modules — needs `npx expo prebuild` or a dev client | **Yes** |
+| **AsyncStorage** | Works in Expo Go out of the box, no prebuild needed, simple async API | Asynchronous only, slower, no encryption | **No** |
+
+> **Which should I use?** If you're already using a dev client or have run `npx expo prebuild`, use MMKV. If you need to stay in Expo Go without prebuilding, use AsyncStorage.
+
+### react-native-mmkv
+
+Synchronous, ~30x faster than AsyncStorage, built on WeChat's battle-tested C++ library. **Requires a prebuild** (native module via Nitro Modules).
 
 ```bash
-npx expo install react-native-mmkv
+npx expo install react-native-mmkv react-native-nitro-modules
+npx expo prebuild
 ```
 
 ### Basic Usage
@@ -546,12 +558,61 @@ const secureStorage = new MMKV({
 
 > **Note:** For authentication tokens and secrets, prefer `expo-secure-store` (uses iOS Keychain / Android EncryptedSharedPreferences). Use MMKV for app data, preferences, caches, and non-sensitive state.
 
+### AsyncStorage
+
+Works in Expo Go without prebuild. Simple async key-value storage.
+
+```bash
+npx expo install @react-native-async-storage/async-storage
+```
+
+```tsx
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Write (asynchronous)
+await AsyncStorage.setItem('user.name', 'Jane');
+
+// Read (asynchronous)
+const name = await AsyncStorage.getItem('user.name'); // 'Jane' | null
+
+// Store objects (must serialize manually)
+await AsyncStorage.setItem('prefs', JSON.stringify({ theme: 'dark' }));
+const prefs = JSON.parse((await AsyncStorage.getItem('prefs')) ?? '{}');
+
+// Delete
+await AsyncStorage.removeItem('user.name');
+
+// Clear all
+await AsyncStorage.clear();
+```
+
+#### With Zustand (Persisted State)
+
+```tsx
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const useSettingsStore = create(
+  persist(
+    (set) => ({
+      theme: 'light' as 'light' | 'dark',
+      setTheme: (theme: 'light' | 'dark') => set({ theme }),
+    }),
+    {
+      name: 'settings-storage',
+      storage: createJSONStorage(() => AsyncStorage),
+    },
+  ),
+);
+```
+
 ## Common Mistakes
 
 | Mistake | Fix |
 |---------|-----|
 | Storing tokens in AsyncStorage | Use `expo-secure-store` for sensitive credentials |
-| Using AsyncStorage for app data | Use `react-native-mmkv` — synchronous, ~30x faster |
+| Using AsyncStorage when prebuild is available | Use `react-native-mmkv` — synchronous, ~30x faster |
 | Setting `refetchOnWindowFocus: true` on mobile | Mobile apps don't have window focus events like web; set to `false` |
 | Not handling 401 token expiry | Implement token refresh in your fetch wrapper |
 | Fetching in `useEffect` without cleanup | Use React Query or AbortController to cancel on unmount |
