@@ -20,34 +20,29 @@ On top of the core workflow, React Native HiFi includes specialized skills for E
 
 **Note:** Installation differs by platform. Pick your platform below.
 
-### Claude Code
+### Claude Code (Custom Marketplace)
 
-Clone the repo and install as a local plugin:
+In Claude Code, register the marketplace first:
 
 ```bash
-git clone https://github.com/bidah/react-native-hifi.git ~/.claude/plugins/react-native-hifi
-claude plugin install ~/.claude/plugins/react-native-hifi
+/plugin marketplace add bidah/react-native-hifi-marketplace
 ```
 
-To update:
+Then install the plugin from this marketplace:
 
 ```bash
-cd ~/.claude/plugins/react-native-hifi && git pull
+/plugin install react-native-hifi@react-native-hifi-marketplace
 ```
 
 ### Cursor
 
-Add React Native HiFi skills to your project by cloning into your workspace:
+In Cursor Agent chat, install from marketplace:
 
-```bash
-git clone https://github.com/bidah/react-native-hifi.git .react-native-hifi
+```text
+/add-plugin react-native-hifi
 ```
 
-Then add to your `.cursorrules` file:
-
-```
-When working on React Native or Expo projects, read and follow the skills in .react-native-hifi/skills/. Before any task, check if a relevant skill exists by reading .react-native-hifi/skills/using-react-native-hifi/SKILL.md first.
-```
+or search for "react-native-hifi" in the plugin marketplace.
 
 ### Codex
 
@@ -195,10 +190,10 @@ See `skills/writing-skills/SKILL.md` for the complete guide.
 
 ## Updating
 
-Update by pulling the latest changes:
+Skills update automatically when you update the plugin:
 
 ```bash
-cd ~/.claude/plugins/react-native-hifi && git pull
+/plugin update react-native-hifi
 ```
 
 ## License
