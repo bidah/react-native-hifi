@@ -20,17 +20,12 @@ On top of the core workflow, React Native HiFi includes specialized skills for E
 
 **Note:** Installation differs by platform. Pick your platform below.
 
-### Claude Code (Custom Marketplace)
+### Claude Code
 
-In Claude Code, register the marketplace first:
+Register the marketplace, then install:
 
 ```bash
 /plugin marketplace add bidah/react-native-hifi-marketplace
-```
-
-Then install the plugin from this marketplace:
-
-```bash
 /plugin install react-native-hifi@react-native-hifi-marketplace
 ```
 
