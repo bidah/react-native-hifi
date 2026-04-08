@@ -1,18 +1,18 @@
 {
-  "name": "react-native-space",
-  "displayName": "React Native Space",
+  "name": "react-native-hifi",
+  "displayName": "React Native HiFi",
   "description": "React Native & Expo development workflow: skills library with TDD, debugging, collaboration patterns, and proven techniques",
   "version": "5.0.2",
   "author": {
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
   },
-  "homepage": "https://github.com/react-native-vibe-code/react-native-space",
-  "repository": "https://github.com/react-native-vibe-code/react-native-space",
+  "homepage": "https://github.com/react-native-vibe-code/react-native-hifi",
+  "repository": "https://github.com/react-native-vibe-code/react-native-hifi",
   "license": "MIT",
   "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows", "react-native", "expo"],
   "skills": "./skills/",
   "agents": "./agents/",
   "commands": "./commands/",
-  "hooks": "./hooks/hooks.json"
+  "hooks": "./hooks/hooks-cursor.json"
 }

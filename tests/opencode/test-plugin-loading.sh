@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Test: Plugin Loading
-# Verifies that the react-native-space plugin loads correctly in OpenCode
+# Verifies that the react-native-hifi plugin loads correctly in OpenCode
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -15,15 +15,15 @@ trap cleanup_test_env EXIT
 
 # Test 1: Verify plugin file exists and is registered
 echo "Test 1: Checking plugin registration..."
-if [ -L "$HOME/.config/opencode/plugins/react-native-space.js" ]; then
+if [ -L "$HOME/.config/opencode/plugins/react-native-hifi.js" ]; then
     echo "  [PASS] Plugin symlink exists"
 else
-    echo "  [FAIL] Plugin symlink not found at $HOME/.config/opencode/plugins/react-native-space.js"
+    echo "  [FAIL] Plugin symlink not found at $HOME/.config/opencode/plugins/react-native-hifi.js"
     exit 1
 fi
 
 # Verify symlink target exists
-if [ -f "$(readlink -f "$HOME/.config/opencode/plugins/react-native-space.js")" ]; then
+if [ -f "$(readlink -f "$HOME/.config/opencode/plugins/react-native-hifi.js")" ]; then
     echo "  [PASS] Plugin symlink target exists"
 else
     echo "  [FAIL] Plugin symlink target does not exist"
@@ -32,7 +32,7 @@ fi
 
 # Test 2: Verify skills directory is populated
 echo "Test 2: Checking skills directory..."
-skill_count=$(find "$HOME/.config/opencode/react-native-space/skills" -name "SKILL.md" | wc -l)
+skill_count=$(find "$HOME/.config/opencode/react-native-hifi/skills" -name "SKILL.md" | wc -l)
 if [ "$skill_count" -gt 0 ]; then
     echo "  [PASS] Found $skill_count skills installed"
 else
@@ -40,18 +40,18 @@ else
     exit 1
 fi
 
-# Test 4: Check using-react-native-space skill exists (critical for bootstrap)
-echo "Test 4: Checking using-react-native-space skill (required for bootstrap)..."
-if [ -f "$HOME/.config/opencode/react-native-space/skills/using-react-native-space/SKILL.md" ]; then
-    echo "  [PASS] using-react-native-space skill exists"
+# Test 4: Check using-react-native-hifi skill exists (critical for bootstrap)
+echo "Test 4: Checking using-react-native-hifi skill (required for bootstrap)..."
+if [ -f "$HOME/.config/opencode/react-native-hifi/skills/using-react-native-hifi/SKILL.md" ]; then
+    echo "  [PASS] using-react-native-hifi skill exists"
 else
-    echo "  [FAIL] using-react-native-space skill not found (required for bootstrap)"
+    echo "  [FAIL] using-react-native-hifi skill not found (required for bootstrap)"
     exit 1
 fi
 
 # Test 5: Verify plugin JavaScript syntax (basic check)
 echo "Test 5: Checking plugin JavaScript syntax..."
-plugin_file="$HOME/.config/opencode/react-native-space/.opencode/plugins/react-native-space.js"
+plugin_file="$HOME/.config/opencode/react-native-hifi/.opencode/plugins/react-native-hifi.js"
 if node --check "$plugin_file" 2>/dev/null; then
     echo "  [PASS] Plugin JavaScript syntax is valid"
 else

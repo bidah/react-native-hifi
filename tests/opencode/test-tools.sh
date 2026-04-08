@@ -36,8 +36,8 @@ output=$(timeout 60s opencode run --print-logs "Use the find_skills tool to list
 }
 
 # Check for expected patterns in output
-if echo "$output" | grep -qi "react-native-space:brainstorming\|react-native-space:using-react-native-space\|Available skills"; then
-    echo "  [PASS] find_skills tool discovered react-native-space skills"
+if echo "$output" | grep -qi "react-native-hifi:brainstorming\|react-native-hifi:using-react-native-hifi\|Available skills"; then
+    echo "  [PASS] find_skills tool discovered react-native-hifi skills"
 else
     echo "  [FAIL] find_skills did not return expected skills"
     echo "  Output was:"
@@ -76,12 +76,12 @@ else
     exit 1
 fi
 
-# Test 3: Test use_skill with react-native-space: prefix
+# Test 3: Test use_skill with react-native-hifi: prefix
 echo ""
-echo "Test 3: Testing use_skill with react-native-space: prefix..."
-echo "  Running opencode with react-native-space:brainstorming skill..."
+echo "Test 3: Testing use_skill with react-native-hifi: prefix..."
+echo "  Running opencode with react-native-hifi:brainstorming skill..."
 
-output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load react-native-space:brainstorming and tell me the first few lines of what you received." 2>&1) || {
+output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load react-native-hifi:brainstorming and tell me the first few lines of what you received." 2>&1) || {
     exit_code=$?
     if [ $exit_code -eq 124 ]; then
         echo "  [FAIL] OpenCode timed out after 60s"
@@ -92,9 +92,9 @@ output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load r
 
 # Check for expected content from brainstorming skill
 if echo "$output" | grep -qi "brainstorming\|Launching skill\|skill.*loaded"; then
-    echo "  [PASS] use_skill loaded react-native-space:brainstorming skill"
+    echo "  [PASS] use_skill loaded react-native-hifi:brainstorming skill"
 else
-    echo "  [FAIL] use_skill did not load react-native-space:brainstorming correctly"
+    echo "  [FAIL] use_skill did not load react-native-hifi:brainstorming correctly"
     echo "  Output was:"
     echo "$output" | head -50
     exit 1

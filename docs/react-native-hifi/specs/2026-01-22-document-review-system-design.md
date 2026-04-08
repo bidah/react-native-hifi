@@ -2,7 +2,7 @@
 
 ## Overview
 
-Add two new review stages to the react-native-space workflow:
+Add two new review stages to the react-native-hifi workflow:
 
 1. **Spec Document Review** - After brainstorming, before writing-plans
 2. **Plan Document Review** - After writing-plans, before implementation

@@ -1,6 +1,6 @@
-# React Native Space
+# React Native HiFi
 
-React Native Space is a complete React Native & Expo development workflow for your coding agents, built on top of a set of composable "skills" and initial instructions that make sure your agent uses them.
+React Native HiFi is a complete React Native & Expo development workflow for your coding agents, built on top of a set of composable "skills" and initial instructions that make sure your agent uses them.
 
 Inspired by and based on [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent.
 
@@ -14,7 +14,7 @@ After you've signed off on the design, your agent puts together an implementatio
 
 Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for Claude to be able to work autonomously for a couple hours at a time without deviating from the plan you put together.
 
-On top of the core workflow, React Native Space includes specialized skills for Expo development: building native UI with SwiftUI and Jetpack Compose, setting up Tailwind CSS, configuring dev clients, creating API routes, fetching data natively, and testing on real devices through the agent-device skill.
+On top of the core workflow, React Native HiFi includes specialized skills for Expo development: building native UI with SwiftUI and Jetpack Compose, setting up Tailwind CSS, configuring dev clients, creating API routes, fetching data natively, and testing on real devices through the agent-device skill.
 
 ## Installation
 
@@ -25,13 +25,13 @@ On top of the core workflow, React Native Space includes specialized skills for 
 In Claude Code, register the marketplace first:
 
 ```bash
-/plugin marketplace add rofi-rofi/react-native-space-marketplace
+/plugin marketplace add rofi-rofi/react-native-hifi-marketplace
 ```
 
 Then install the plugin from this marketplace:
 
 ```bash
-/plugin install react-native-space@react-native-space-marketplace
+/plugin install react-native-hifi@react-native-hifi-marketplace
 ```
 
 ### Cursor (via Plugin Marketplace)
@@ -39,17 +39,17 @@ Then install the plugin from this marketplace:
 In Cursor Agent chat, install from marketplace:
 
 ```text
-/add-plugin react-native-space
+/add-plugin react-native-hifi
 ```
 
-or search for "react-native-space" in the plugin marketplace.
+or search for "react-native-hifi" in the plugin marketplace.
 
 ### Codex
 
 Tell Codex:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/react-native-space/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/react-native-hifi/refs/heads/main/.codex/INSTALL.md
 ```
 
 **Detailed docs:** [docs/README.codex.md](docs/README.codex.md)
@@ -59,7 +59,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/r
 Tell OpenCode:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/react-native-space/refs/heads/main/.opencode/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/react-native-hifi/refs/heads/main/.opencode/INSTALL.md
 ```
 
 **Detailed docs:** [docs/README.opencode.md](docs/README.opencode.md)
@@ -67,18 +67,18 @@ Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/r
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/react-native-vibe-code/react-native-space
+gemini extensions install https://github.com/react-native-vibe-code/react-native-hifi
 ```
 
 To update:
 
 ```bash
-gemini extensions update react-native-space
+gemini extensions update react-native-hifi
 ```
 
 ### Verify Installation
 
-Start a new session in your chosen platform and ask for something that should trigger a skill (for example, "help me plan this feature" or "let's build a new screen"). The agent should automatically invoke the relevant react-native-space skill.
+Start a new session in your chosen platform and ask for something that should trigger a skill (for example, "help me plan this feature" or "let's build a new screen"). The agent should automatically invoke the relevant react-native-hifi skill.
 
 ## Skills Overview
 
@@ -134,7 +134,7 @@ Production-grade patterns and guides from [software-mansion-labs/skills](https:/
 ### Meta
 
 - **writing-skills** - Create new skills following best practices
-- **using-react-native-space** - Introduction to the skills system
+- **using-react-native-hifi** - Introduction to the skills system
 
 ## The Basic Workflow
 
@@ -180,7 +180,7 @@ See `skills/writing-skills/SKILL.md` for the complete guide.
 Skills update automatically when you update the plugin:
 
 ```bash
-/plugin update react-native-space
+/plugin update react-native-hifi
 ```
 
 ## License

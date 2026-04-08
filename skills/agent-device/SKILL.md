@@ -1,515 +1,262 @@
 ---
 name: agent-device
-description: Use when automating mobile device interactions for testing or development, controlling iOS simulators or Android emulators, inspecting accessibility trees, capturing screenshots, or performing automated UI testing workflows
+description: Automates interactions for iOS simulators/devices and Android emulators/devices. Use when navigating apps, taking snapshots/screenshots, tapping, typing, scrolling, or extracting UI info on mobile targets.
 ---
 
-# Mobile Device Automation for Testing and Development
+## Mobile Automation with agent-device
 
-## Overview
+For exploration, use snapshot refs. For deterministic replay, use selectors.
+For structured exploratory QA bug hunts and reporting, use [../dogfood/SKILL.md](../dogfood/SKILL.md).
 
-Agent-driven device automation enables programmatic control of iOS simulators, Android emulators, and physical devices. This covers launching apps, interacting with UI elements, inspecting the accessibility tree, capturing screenshots, and streaming app output for automated testing and development workflows.
+## Start Here (Read This First)
 
-**Core principle:** Interact with the device through its accessibility tree, not pixel coordinates. Element references provide stable automation targets across different screen sizes and OS versions.
+Use this skill as a router, not a full manual.
 
-## When to Use
+1. Pick one mode:
+   - Normal interaction flow
+   - Debug/crash flow
+   - Replay maintenance flow
+2. Run one canonical flow below.
+3. Open references only if blocked.
 
-- Automating UI test flows on simulators/emulators
-- Verifying visual appearance across device configurations
-- Testing deep links, push notifications, and app lifecycle
-- Capturing screenshots for documentation or review
-- Debugging layout issues by inspecting the accessibility tree
-- Running end-to-end test scenarios
-- Performance profiling during automated interactions
+## Decision Map
 
-## Device Control
+- No target context yet: `devices` -> pick target -> `open`.
+- Normal UI task: `open` -> `snapshot -i` -> `press/fill` -> `diff snapshot -i` -> `close`
+- Debug/crash: `open <app>` -> `logs clear --restart` -> reproduce -> `network dump` -> `logs path` -> targeted `grep`
+- Replay drift: `replay -u <path>` -> verify updated selectors
+- Remote multi-tenant run: allocate lease -> point client at remote daemon base URL -> run commands with tenant isolation flags -> heartbeat/release lease
+- Device-scope isolation run: set iOS simulator set / Android allowlist -> run selectors within scope only
 
-### Opening and Managing Simulators
+## Target Selection Rules
 
-```bash
-# List available simulators
-xcrun simctl list devices available
+- iOS local QA: use simulators unless the task explicitly requires a physical device.
+- iOS local QA in mixed simulator/device environments: run `ensure-simulator` first and pass `--device`, `--udid`, or `--ios-simulator-device-set` on later commands.
+- Android local QA: use `install` or `reinstall` for `.apk`/`.aab` files, then relaunch by installed package name.
+- Android React Native + Metro flows: prefer `open <package> --remote-config <path> --relaunch`.
+- In mixed-device environments, always pin the exact target with `--serial`, `--device`, `--udid`, or an isolation scope.
+- For session-bound automation runs, prefer a pre-bound session/platform instead of repeating selectors on every command: set `AGENT_DEVICE_SESSION`, set `AGENT_DEVICE_PLATFORM`, and the daemon will enforce the shared lock policy across CLI, typed client, and RPC entry points.
+- Use `--session-lock reject|strip` (or `AGENT_DEVICE_SESSION_LOCK`) only when you need to override the default reject behavior. Lock mode applies to nested `batch` steps too.
 
-# Boot a specific simulator
-xcrun simctl boot "iPhone 16 Pro"
+## Canonical Flows
 
-# Open Simulator app
-open -a Simulator
-
-# Android: list available emulators
-emulator -list-avds
-
-# Android: start emulator
-emulator -avd Pixel_8_API_35
-```
-
-### Launching Apps
+### 1) Normal Interaction Flow
 
 ```bash
-# iOS: install and launch on simulator
-npx expo run:ios --device "iPhone 16 Pro"
-
-# Android: install and launch on emulator
-npx expo run:android
-
-# Open app via scheme
-xcrun simctl openurl booted "myapp://home"
-
-# Android deep link
-adb shell am start -a android.intent.action.VIEW -d "myapp://home"
+agent-device open Settings --platform ios
+agent-device snapshot -i
+agent-device press @e3
+agent-device diff snapshot -i
+agent-device fill @e5 "test"
+agent-device close
 ```
 
-## Core Commands
-
-### Open
-
-Launch apps or URLs on the device:
+### 1a) Local iOS Simulator QA Flow
 
 ```bash
-# Open a URL in the default browser
-xcrun simctl openurl booted "https://example.com"
-
-# Open a deep link in your app
-xcrun simctl openurl booted "myapp://profile/42"
-
-# Android equivalent
-adb shell am start -a android.intent.action.VIEW -d "myapp://profile/42"
+agent-device ensure-simulator --platform ios --device "iPhone 16" --boot
+agent-device open MyApp --platform ios --device "iPhone 16" --session qa-ios --relaunch
+agent-device snapshot -i
+agent-device press @e3
+agent-device close
 ```
 
-### Press
+Use this when a physical iPhone is also connected and you want deterministic simulator-only automation.
 
-Simulate button presses:
+### 1b) Android React Native + Metro QA Flow
 
 ```bash
-# iOS: Home button
-xcrun simctl ui booted button home
-
-# iOS: Lock button
-xcrun simctl ui booted button lock
-
-# Android: Back button
-adb shell input keyevent KEYCODE_BACK
-
-# Android: Home button
-adb shell input keyevent KEYCODE_HOME
-
-# Android: Enter key
-adb shell input keyevent KEYCODE_ENTER
+agent-device reinstall MyApp /path/to/app-debug.apk --platform android --serial emulator-5554
+agent-device open com.example.myapp --remote-config ./agent-device.remote.json --relaunch
+agent-device snapshot -i
+agent-device close
 ```
 
-### Fill (Text Input)
+Do not use `open <apk|aab> --relaunch` on Android. Install/reinstall binaries first, then relaunch by package.
 
-Enter text into focused fields:
+### 1c) Session-Bound Automation Flow
 
 ```bash
-# iOS: type text into focused field
-xcrun simctl io booted input "Hello World"
+export AGENT_DEVICE_SESSION=qa-ios
+export AGENT_DEVICE_PLATFORM=ios
+export AGENT_DEVICE_SESSION_LOCK=strip
 
-# Android: input text
-adb shell input text "Hello%sWorld"  # %s = space
-
-# Android: paste from clipboard (handles special characters)
-adb shell input keyevent KEYCODE_PASTE
+agent-device open MyApp --relaunch
+agent-device snapshot -i
+agent-device batch --steps-file /tmp/qa-steps.json --json
+agent-device close
 ```
 
-### Scroll
+Use this for orchestrators that must preserve one bound session/device across many plain CLI calls without a wrapper script.
+
+### 1d) Android Emulator Session-Bound Flow
 
 ```bash
-# iOS: simulate scroll gesture
-xcrun simctl io booted scroll --direction down --distance 300
+export AGENT_DEVICE_SESSION=qa-android
+export AGENT_DEVICE_PLATFORM=android
 
-# Android: swipe to scroll
-adb shell input swipe 500 1500 500 500 300  # x1 y1 x2 y2 duration_ms
+agent-device reinstall MyApp /path/to/app-debug.apk --serial emulator-5554
+agent-device --session-lock reject open com.example.myapp --relaunch
+agent-device snapshot -i
+agent-device close --shutdown
 ```
 
-### Swipe
+### 2) Debug/Crash Flow
 
 ```bash
-# iOS: swipe gesture
-xcrun simctl io booted swipe --direction left
-
-# Android: swipe gesture (coordinates)
-adb shell input swipe 900 500 100 500 200  # Left swipe
-adb shell input swipe 100 500 900 500 200  # Right swipe
-adb shell input swipe 500 500 500 1500 200 # Down swipe
+agent-device open MyApp --platform ios
+agent-device logs clear --restart
+agent-device network dump 25
+agent-device logs path
 ```
 
-## Accessibility Tree Snapshots
+Logging is off by default. Enable only for debugging windows.
+`logs clear --restart` requires an active app session (`open <app>` first).
 
-The accessibility tree provides a structural representation of all UI elements, their labels, roles, and states. This is the primary mechanism for locating elements to interact with.
-
-### iOS Accessibility Inspection
+### 3) Replay Maintenance Flow
 
 ```bash
-# Dump the accessibility hierarchy
-xcrun simctl ui booted accessibility
-
-# Using Accessibility Inspector (GUI)
-open -a "Accessibility Inspector"
+agent-device replay -u ./session.ad
 ```
 
-### Android Accessibility
+### 4) Remote Tenant Lease Flow (HTTP JSON-RPC)
 
 ```bash
-# Dump UI hierarchy
-adb shell uiautomator dump /sdcard/ui_dump.xml
-adb pull /sdcard/ui_dump.xml
+export AGENT_DEVICE_DAEMON_BASE_URL=http://mac-host.example:4310
+export AGENT_DEVICE_DAEMON_AUTH_TOKEN=<token>
 
-# View the dump
-cat ui_dump.xml
+# Allocate lease
+curl -sS "${AGENT_DEVICE_DAEMON_BASE_URL}/rpc" \
+  -H "content-type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{"jsonrpc":"2.0","id":"alloc-1","method":"agent_device.lease.allocate","params":{"runId":"run-123","tenantId":"acme","ttlMs":60000}}'
+
+# Use lease in tenant-isolated command execution
+agent-device \
+  --tenant acme \
+  --session-isolation tenant \
+  --run-id run-123 \
+  --lease-id <lease-id> \
+  session list --json
+
+# Heartbeat and release
+curl -sS "${AGENT_DEVICE_DAEMON_BASE_URL}/rpc" \
+  -H "content-type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{"jsonrpc":"2.0","id":"hb-1","method":"agent_device.lease.heartbeat","params":{"leaseId":"<lease-id>","ttlMs":60000}}'
+curl -sS "${AGENT_DEVICE_DAEMON_BASE_URL}/rpc" \
+  -H "content-type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{"jsonrpc":"2.0","id":"rel-1","method":"agent_device.lease.release","params":{"leaseId":"<lease-id>"}}'
 ```
 
-### Element Properties
+## Command Skeleton (Minimal)
 
-Each element in the accessibility tree exposes:
-
-| Property | Description |
-|----------|-------------|
-| `label` | Human-readable name (accessibilityLabel in RN) |
-| `role` | Element type (button, text, image, etc.) |
-| `value` | Current value (text input content, slider position) |
-| `traits` | Behavioral hints (selected, disabled, header) |
-| `frame` | Position and size on screen |
-| `identifier` | Test ID (testID prop in React Native) |
-
-### Setting testID in React Native
-
-```tsx
-<Pressable
-  testID="submit-button"
-  accessibilityLabel="Submit form"
-  accessibilityRole="button"
-  onPress={handleSubmit}
->
-  <Text>Submit</Text>
-</Pressable>
-
-<TextInput
-  testID="email-input"
-  accessibilityLabel="Email address"
-  placeholder="Enter email"
-/>
-```
-
-## Element References (@e5 Pattern)
-
-Element references provide stable identifiers for automation targets. Instead of fragile XPath or coordinate-based targeting, use accessibility identifiers:
-
-```tsx
-// In your React Native code, set testID for automation
-<View testID="@e5-dashboard">
-  <Text testID="@e5-welcome-text">Welcome</Text>
-  <Pressable testID="@e5-settings-btn">
-    <Text>Settings</Text>
-  </Pressable>
-  <FlatList
-    testID="@e5-item-list"
-    data={items}
-    renderItem={({ item }) => (
-      <View testID={`@e5-item-${item.id}`}>
-        <Text>{item.name}</Text>
-      </View>
-    )}
-  />
-</View>
-```
-
-### Benefits of Element References
-
-- **Stable across screen sizes:** No pixel coordinates to break
-- **Survives layout changes:** Element identity is semantic, not positional
-- **Readable test output:** `@e5-settings-btn` is self-documenting
-- **Structural diffing:** Compare trees between test runs to detect regressions
-
-## Structural Diffing
-
-Compare accessibility tree snapshots between builds to detect unintended UI changes:
+### Session and navigation
 
 ```bash
-# Capture baseline
-xcrun simctl ui booted accessibility > baseline.txt
-
-# After code changes, capture again
-xcrun simctl ui booted accessibility > current.txt
-
-# Diff the structures
-diff baseline.txt current.txt
+agent-device devices
+agent-device devices --platform ios --ios-simulator-device-set /tmp/tenant-a/simulators
+agent-device devices --platform android --android-device-allowlist emulator-5554,device-1234
+agent-device ensure-simulator --device "iPhone 16" --ios-simulator-device-set /tmp/tenant-a/simulators
+agent-device ensure-simulator --device "iPhone 16" --runtime com.apple.CoreSimulator.SimRuntime.iOS-18-4 --ios-simulator-device-set /tmp/tenant-a/simulators --boot
+agent-device open [app|url] [url]
+agent-device open [app] --relaunch
+agent-device close [app]
+agent-device install <app> <path-to-binary>
+agent-device install-from-source <url> [--header "name:value"]
+agent-device reinstall <app> <path-to-binary>
+agent-device session list
 ```
 
-### What to Look For
+Use `boot` only as fallback when `open` cannot find/connect to a ready target.
 
-- Missing or added elements (feature regressions)
-- Changed accessibility labels (broken VoiceOver)
-- Altered element hierarchy (layout changes)
-- Changed roles or traits (interaction regressions)
-
-## App Output Streaming
-
-Stream app logs in real time for debugging during automation:
+### Snapshot and targeting
 
 ```bash
-# iOS: stream app logs from simulator
-xcrun simctl spawn booted log stream --predicate 'subsystem == "com.myapp"' --level debug
-
-# Simpler: all simulator logs
-xcrun simctl spawn booted log stream --level info | grep MyApp
-
-# Android: logcat filtered to your app
-adb logcat --pid=$(adb shell pidof com.myapp) -v time
-
-# React Native specific logs
-npx react-native log-ios
-npx react-native log-android
+agent-device snapshot -i
+agent-device diff snapshot -i
+agent-device find "Sign In" click
+agent-device press @e1
+agent-device fill @e2 "text"
+agent-device is visible 'id="anchor"'
 ```
 
-## Network Inspection
+`press` is canonical tap command; `click` is an alias.
 
-Monitor network requests during automated testing:
+### Utilities
 
 ```bash
-# iOS: use nscurl for HTTPS diagnostics
-nscurl --ats-diagnostics https://api.example.com
-
-# Android: enable network monitoring
-adb shell settings put global http_proxy "localhost:8888"
-
-# React Native: use Flipper or React Native Debugger for network inspection
-# Or add to your app:
+agent-device appstate
+agent-device clipboard read
+agent-device clipboard write "token"
+agent-device keyboard status
+agent-device keyboard dismiss
+agent-device perf --json
+agent-device network dump [limit] [summary|headers|body|all]
+agent-device push <bundle|package> <payload.json|inline-json>
+agent-device trigger-app-event screenshot_taken '{"source":"qa"}'
+agent-device get text @e1
+agent-device screenshot out.png
+agent-device settings permission grant notifications
+agent-device settings permission reset camera
+agent-device trace start
+agent-device trace stop ./trace.log
 ```
 
-```tsx
-// Enable network inspection in development
-if (__DEV__) {
-  // XMLHttpRequest logging
-  const originalFetch = global.fetch;
-  global.fetch = async (...args) => {
-    console.log('FETCH:', args[0]);
-    const response = await originalFetch(...args);
-    console.log('RESPONSE:', response.status);
-    return response;
-  };
-}
-```
-
-## Performance Metrics
-
-### iOS Performance
+### Batch (when sequence is already known)
 
 ```bash
-# CPU and memory usage
-xcrun simctl spawn booted log stream --predicate 'eventMessage contains "memory"'
-
-# Instruments from command line
-xcrun xctrace record --device booted --template "Time Profiler" --launch -- com.myapp
+agent-device batch --steps-file /tmp/batch-steps.json --json
 ```
 
-### Android Performance
+### Performance Check
 
-```bash
-# CPU info
-adb shell dumpsys cpuinfo | grep myapp
+- Use `agent-device perf --json` (or `metrics --json`) after `open`.
+- For detailed metric semantics, see [references/perf-metrics.md](references/perf-metrics.md).
 
-# Memory info
-adb shell dumpsys meminfo com.myapp
+## Guardrails (High Value Only)
 
-# GPU rendering
-adb shell dumpsys gfxinfo com.myapp
+- Re-snapshot after UI mutations (navigation/modal/list changes).
+- Prefer `snapshot -i`; scope/depth only when needed.
+- Use refs for discovery, selectors for replay/assertions.
+- `find "<query>" click --json` returns `{ ref, locator, query, x, y }` — all derived from the matched snapshot node.
+- Use `fill` for clear-then-type semantics; use `type` for focused append typing.
+- Use `install` for in-place app upgrades, and `reinstall` for deterministic fresh-state runs.
+- App binary format support: Android `.apk`/`.aab`, iOS `.app`/`.ipa`.
+- Android `.aab` requires `bundletool` in `PATH`.
+- `network dump` is best-effort and parses HTTP(s) entries from the session app log file.
+- For AndroidTV/tvOS selection, always pair `--target` with `--platform`.
+- Permission settings are app-scoped and require an active session app:
+  `settings permission <grant|deny|reset> <camera|microphone|photos|contacts|notifications> [full|limited]`
+- iOS simulator permission alerts: use `alert wait` then `alert accept/dismiss` — retries internally for up to 2s.
 
-# Frame rate monitoring
-adb shell dumpsys SurfaceFlinger --latency
-```
+## Common Failure Patterns
 
-### React Native Performance
-
-```tsx
-// Enable performance monitoring
-import { PerformanceObserver } from 'react-native-performance';
-
-// In development
-if (__DEV__) {
-  const observer = new PerformanceObserver((list) => {
-    list.getEntries().forEach((entry) => {
-      console.log(`${entry.name}: ${entry.duration}ms`);
-    });
-  });
-  observer.observe({ entryTypes: ['measure'] });
-}
-```
-
-## Deep Links
-
-Test deep link handling:
-
-```bash
-# iOS simulator
-xcrun simctl openurl booted "myapp://settings"
-xcrun simctl openurl booted "myapp://user/42"
-xcrun simctl openurl booted "https://myapp.com/share/abc"  # Universal links
-
-# Android emulator
-adb shell am start -a android.intent.action.VIEW -d "myapp://settings"
-adb shell am start -a android.intent.action.VIEW -d "https://myapp.com/share/abc"
-```
-
-### Verifying Deep Link Handling
-
-```tsx
-// In your app, verify routing works
-import { useURL } from 'expo-linking';
-
-function DeepLinkHandler() {
-  const url = useURL();
-
-  useEffect(() => {
-    if (url) {
-      console.log('Deep link received:', url);
-    }
-  }, [url]);
-}
-```
-
-## Push Notifications
-
-### iOS Simulator
-
-```bash
-# Send push notification to simulator
-xcrun simctl push booted com.myapp notification.apns
-```
-
-Create `notification.apns`:
-
-```json
-{
-  "aps": {
-    "alert": {
-      "title": "Test Notification",
-      "body": "This is a test push notification"
-    },
-    "badge": 1,
-    "sound": "default"
-  },
-  "customData": {
-    "screen": "orders",
-    "orderId": "12345"
-  }
-}
-```
-
-### Android Emulator
-
-```bash
-# Use Firebase CLI or adb
-adb shell am broadcast \
-  -a com.google.android.c2dm.intent.RECEIVE \
-  -c com.myapp \
-  --es "title" "Test Notification" \
-  --es "body" "This is a test"
-```
-
-## Screenshots and Recording
-
-```bash
-# iOS: screenshot
-xcrun simctl io booted screenshot screenshot.png
-
-# iOS: record video
-xcrun simctl io booted recordVideo output.mp4
-# Press Ctrl+C to stop
-
-# Android: screenshot
-adb exec-out screencap -p > screenshot.png
-
-# Android: record video
-adb shell screenrecord /sdcard/recording.mp4
-# Press Ctrl+C to stop, then pull:
-adb pull /sdcard/recording.mp4
-```
-
-## Integration with Development Workflow
-
-### Automated Test Script
-
-```bash
-#!/bin/bash
-# run-e2e.sh - Example automated test flow
-
-APP_SCHEME="myapp"
-SIMULATOR="iPhone 16 Pro"
-
-# 1. Boot simulator
-xcrun simctl boot "$SIMULATOR" 2>/dev/null || true
-
-# 2. Install and launch app
-npx expo run:ios --device "$SIMULATOR" --no-bundler &
-sleep 10
-
-# 3. Capture initial state
-xcrun simctl io booted screenshot "01-launch.png"
-
-# 4. Test deep link
-xcrun simctl openurl booted "$APP_SCHEME://settings"
-sleep 2
-xcrun simctl io booted screenshot "02-settings.png"
-
-# 5. Test push notification
-xcrun simctl push booted com.myapp test-notification.apns
-sleep 1
-xcrun simctl io booted screenshot "03-notification.png"
-
-# 6. Dump accessibility tree for verification
-xcrun simctl ui booted accessibility > accessibility-dump.txt
-
-echo "Test artifacts captured."
-```
-
-### CI Integration
-
-```yaml
-# .github/workflows/e2e.yml
-jobs:
-  e2e-ios:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup
-        run: |
-          npm ci
-          npx expo prebuild --platform ios
-      - name: Boot Simulator
-        run: |
-          xcrun simctl boot "iPhone 16 Pro"
-      - name: Build and Test
-        run: |
-          xcodebuild -workspace ios/*.xcworkspace \
-            -scheme MyApp \
-            -sdk iphonesimulator \
-            -destination "name=iPhone 16 Pro" \
-            test
-```
+- `Failed to access Android app sandbox for /path/app-debug.apk`: Android relaunch flow received an APK path instead of package name. Use `reinstall` first, then `open <package> --relaunch`.
+- `Failed to terminate iOS app`: flow may have selected a physical iPhone. Re-run with `ensure-simulator`, then pin with `--device` or `--udid`.
 
 ## Common Mistakes
 
-| Mistake | Fix |
-|---------|-----|
-| Using pixel coordinates for taps | Use `testID` / accessibility identifiers instead |
-| Hardcoding simulator names | Use `xcrun simctl list` to find available devices |
-| Not waiting for app launch | Add appropriate delays or poll for accessibility elements |
-| Missing `testID` on interactive elements | Add `testID` to all tappable/testable components |
-| Forgetting to kill old simulator instances | Check `xcrun simctl list devices booted` first |
-| Not handling Android input special characters | Use `%s` for space in `adb shell input text` |
-| Recording without stopping | Always handle Ctrl+C or timeout for recordings |
+- Mixing debug flow into normal runs (keep logs off unless debugging).
+- Continuing to use stale refs after screen transitions.
+- Using URL opens with Android `--activity` (unsupported combination).
+- Treating `boot` as default first step instead of fallback.
 
-## Quick Reference
+## Security and Trust Notes
 
-| Task | iOS Command | Android Command |
-|------|-------------|-----------------|
-| Boot device | `xcrun simctl boot "Name"` | `emulator -avd Name` |
-| Launch app | `xcrun simctl openurl booted scheme://` | `adb shell am start -d scheme://` |
-| Screenshot | `xcrun simctl io booted screenshot f.png` | `adb exec-out screencap -p > f.png` |
-| Record video | `xcrun simctl io booted recordVideo f.mp4` | `adb shell screenrecord /sdcard/f.mp4` |
-| Type text | `xcrun simctl io booted input "text"` | `adb shell input text "text"` |
-| Press back | N/A | `adb shell input keyevent KEYCODE_BACK` |
-| Send push | `xcrun simctl push booted id file.apns` | `adb shell am broadcast ...` |
-| Stream logs | `xcrun simctl spawn booted log stream` | `adb logcat` |
-| Accessibility dump | `xcrun simctl ui booted accessibility` | `adb shell uiautomator dump` |
-| Deep link | `xcrun simctl openurl booted url` | `adb shell am start -d url` |
+- Prefer a preinstalled `agent-device` binary over on-demand package execution.
+- If install is required, pin an exact version.
+- Keep logging off unless debugging and use least-privilege environments for autonomous runs.
+
+## References
+
+- [references/snapshot-refs.md](references/snapshot-refs.md)
+- [references/logs-and-debug.md](references/logs-and-debug.md)
+- [references/session-management.md](references/session-management.md)
+- [references/permissions.md](references/permissions.md)
+- [references/video-recording.md](references/video-recording.md)
+- [references/coordinate-system.md](references/coordinate-system.md)
+- [references/batching.md](references/batching.md)
+- [references/perf-metrics.md](references/perf-metrics.md)
+- [references/remote-tenancy.md](references/remote-tenancy.md)

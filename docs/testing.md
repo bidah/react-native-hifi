@@ -1,6 +1,6 @@
-# Testing React Native Space Skills
+# Testing React Native HiFi Skills
 
-This document describes how to test React Native Space skills, particularly the integration tests for complex skills like `subagent-driven-development`.
+This document describes how to test React Native HiFi skills, particularly the integration tests for complex skills like `subagent-driven-development`.
 
 ## Overview
 
@@ -33,9 +33,9 @@ cd tests/claude-code
 
 ### Requirements
 
-- Must run from the **react-native-space plugin directory** (not from temp directories)
+- Must run from the **react-native-hifi plugin directory** (not from temp directories)
 - Claude Code must be installed and available as `claude` command
-- Local dev marketplace must be enabled: `"react-native-space@react-native-space-dev": true` in `~/.claude/settings.json`
+- Local dev marketplace must be enabled: `"react-native-hifi@react-native-hifi-dev": true` in `~/.claude/settings.json`
 
 ## Integration Test: subagent-driven-development
 
@@ -149,8 +149,8 @@ python3 tests/claude-code/analyze-token-usage.py ~/.claude/projects/<project-dir
 Session transcripts are stored in `~/.claude/projects/` with the working directory path encoded:
 
 ```bash
-# Example for /Users/jesse/Documents/GitHub/react-native-space/react-native-space
-SESSION_DIR="$HOME/.claude/projects/-Users-jesse-Documents-GitHub-react-native-space-react-native-space"
+# Example for /Users/jesse/Documents/GitHub/react-native-hifi/react-native-hifi
+SESSION_DIR="$HOME/.claude/projects/-Users-jesse-Documents-GitHub-react-native-hifi-react-native-hifi"
 
 # Find recent sessions
 ls -lt "$SESSION_DIR"/*.jsonl | head -5
@@ -182,8 +182,8 @@ ls -lt "$SESSION_DIR"/*.jsonl | head -5
 **Problem**: Skill not found when running headless tests
 
 **Solutions**:
-1. Ensure you're running FROM the react-native-space directory: `cd /path/to/react-native-space && tests/...`
-2. Check `~/.claude/settings.json` has `"react-native-space@react-native-space-dev": true` in `enabledPlugins`
+1. Ensure you're running FROM the react-native-hifi directory: `cd /path/to/react-native-hifi && tests/...`
+2. Check `~/.claude/settings.json` has `"react-native-hifi@react-native-hifi-dev": true` in `enabledPlugins`
 3. Verify skill exists in `skills/` directory
 
 ### Permission Errors
@@ -258,7 +258,7 @@ python3 "$SCRIPT_DIR/analyze-token-usage.py" "$SESSION_FILE"
 1. **Always cleanup**: Use trap to cleanup temp directories
 2. **Parse transcripts**: Don't grep user-facing output - parse the `.jsonl` session file
 3. **Grant permissions**: Use `--permission-mode bypassPermissions` and `--add-dir`
-4. **Run from plugin dir**: Skills only load when running from the react-native-space directory
+4. **Run from plugin dir**: Skills only load when running from the react-native-hifi directory
 5. **Show token usage**: Always include token analysis for cost visibility
 6. **Test real behavior**: Verify actual files created, tests passing, commits made
 

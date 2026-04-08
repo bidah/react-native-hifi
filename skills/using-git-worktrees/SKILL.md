@@ -43,7 +43,7 @@ If no directory exists and no CLAUDE.md preference:
 No worktree directory found. Where should I create worktrees?
 
 1. .worktrees/ (project-local, hidden)
-2. ~/.config/react-native-space/worktrees/<project-name>/ (global location)
+2. ~/.config/react-native-hifi/worktrees/<project-name>/ (global location)
 
 Which would you prefer?
 ```
@@ -68,7 +68,7 @@ Per Jesse's rule "Fix broken things immediately":
 
 **Why critical:** Prevents accidentally committing worktree contents to repository.
 
-### For Global Directory (~/.config/react-native-space/worktrees)
+### For Global Directory (~/.config/react-native-hifi/worktrees)
 
 No .gitignore verification needed - outside project entirely.
 
@@ -88,8 +88,8 @@ case $LOCATION in
   .worktrees|worktrees)
     path="$LOCATION/$BRANCH_NAME"
     ;;
-  ~/.config/react-native-space/worktrees/*)
-    path="~/.config/react-native-space/worktrees/$project/$BRANCH_NAME"
+  ~/.config/react-native-hifi/worktrees/*)
+    path="~/.config/react-native-hifi/worktrees/$project/$BRANCH_NAME"
     ;;
 esac
 

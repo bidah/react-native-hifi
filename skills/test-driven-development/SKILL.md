@@ -15,13 +15,15 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 ## Testing Stack
 
-- **Test runner:** Jest (standard for React Native / Expo)
+- **Test runner:** Jest via `jest-expo` preset (standard for Expo / React Native). Do NOT install Jest 30+ directly — use the Jest version bundled with `jest-expo`. Run tests with `npx jest` (the jest-expo preset is configured in package.json).
 - **Component testing:** `@testing-library/react-native` (React Native Testing Library)
   - `render`, `screen` — render components and query the output
   - `fireEvent`, `userEvent` — simulate user interactions
   - `waitFor`, `findBy*` queries — handle async state updates
   - `renderHook` — test custom hooks in isolation
-- **Assertions:** Jest matchers + `@testing-library/jest-native` extended matchers
+  - **For complete RNTL API reference, query patterns, and version-specific behavior (v13 vs v14), use the `react-native-testing` skill.** It contains up-to-date API docs, query variant tables, interaction guides, and anti-patterns that override potentially stale training data.
+- **Assertions:** Jest matchers (built into `@testing-library/react-native` v13+) + `@testing-library/jest-native` extended matchers
+- **Device testing:** For on-device UI validation after tests pass, use the `agent-device` skill to automate iOS simulators and Android emulators.
 
 ## When to Use
 
@@ -528,6 +530,8 @@ When adding mocks or test utilities, read @testing-anti-patterns.md to avoid com
 - Testing implementation details instead of user-visible behavior
 - Snapshot testing overuse (prefer behavioral assertions)
 - Not using `waitFor` for async state updates
+
+Additionally, the `react-native-testing` skill includes RNTL-specific anti-patterns (wrong query variants, waitFor misuse, unnecessary act(), legacy accessibility props, v14 async pitfalls) — invoke it when writing or reviewing RNTL tests.
 
 ## Final Rule
 

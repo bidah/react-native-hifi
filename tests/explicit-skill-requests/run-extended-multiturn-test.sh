@@ -8,11 +8,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 TIMESTAMP=$(date +%s)
-OUTPUT_DIR="/tmp/react-native-space-tests/${TIMESTAMP}/explicit-skill-requests/extended-multiturn"
+OUTPUT_DIR="/tmp/react-native-hifi-tests/${TIMESTAMP}/explicit-skill-requests/extended-multiturn"
 mkdir -p "$OUTPUT_DIR"
 
 PROJECT_DIR="$OUTPUT_DIR/project"
-mkdir -p "$PROJECT_DIR/docs/react-native-space/plans"
+mkdir -p "$PROJECT_DIR/docs/react-native-hifi/plans"
 
 echo "=== Extended Multi-Turn Test ==="
 echo "Output dir: $OUTPUT_DIR"

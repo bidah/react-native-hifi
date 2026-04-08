@@ -61,7 +61,7 @@ digraph process {
     "Read plan, extract all tasks with full text, note context, create TodoWrite" [shape=box];
     "More tasks remain?" [shape=diamond];
     "Dispatch final code reviewer subagent for entire implementation" [shape=box];
-    "Use react-native-space:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
+    "Use react-native-hifi:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
 
     "Read plan, extract all tasks with full text, note context, create TodoWrite" -> "Dispatch implementer subagent (./implementer-prompt.md)";
     "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer subagent asks questions?";
@@ -80,7 +80,7 @@ digraph process {
     "Mark task complete in TodoWrite" -> "More tasks remain?";
     "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
     "More tasks remain?" -> "Dispatch final code reviewer subagent for entire implementation" [label="no"];
-    "Dispatch final code reviewer subagent for entire implementation" -> "Use react-native-space:finishing-a-development-branch";
+    "Dispatch final code reviewer subagent for entire implementation" -> "Use react-native-hifi:finishing-a-development-branch";
 }
 ```
 
@@ -128,7 +128,7 @@ Implementer subagents report one of four statuses. Handle each appropriately:
 ```
 You: I'm using Subagent-Driven Development to execute this plan.
 
-[Read plan file once: docs/react-native-space/plans/feature-plan.md]
+[Read plan file once: docs/react-native-hifi/plans/feature-plan.md]
 [Extract all 5 tasks with full text and context]
 [Create TodoWrite with all tasks]
 
@@ -139,7 +139,7 @@ Task 1: Hook installation script
 
 Implementer: "Before I begin - should the hook be installed at user or system level?"
 
-You: "User level (~/.config/react-native-space/hooks/)"
+You: "User level (~/.config/react-native-hifi/hooks/)"
 
 Implementer: "Got it. Implementing now..."
 [Later] Implementer:
@@ -265,13 +265,13 @@ Done!
 ## Integration
 
 **Required workflow skills:**
-- **react-native-space:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
-- **react-native-space:writing-plans** - Creates the plan this skill executes
-- **react-native-space:requesting-code-review** - Code review template for reviewer subagents
-- **react-native-space:finishing-a-development-branch** - Complete development after all tasks
+- **react-native-hifi:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
+- **react-native-hifi:writing-plans** - Creates the plan this skill executes
+- **react-native-hifi:requesting-code-review** - Code review template for reviewer subagents
+- **react-native-hifi:finishing-a-development-branch** - Complete development after all tasks
 
 **Subagents should use:**
-- **react-native-space:test-driven-development** - Subagents follow TDD for each task
+- **react-native-hifi:test-driven-development** - Subagents follow TDD for each task
 
 **Alternative workflow:**
-- **react-native-space:executing-plans** - Use for parallel session instead of same-session execution
+- **react-native-hifi:executing-plans** - Use for parallel session instead of same-session execution

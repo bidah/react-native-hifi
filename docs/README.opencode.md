@@ -1,13 +1,13 @@
-# React Native Space for OpenCode
+# React Native HiFi for OpenCode
 
-Complete guide for using React Native Space with [OpenCode.ai](https://opencode.ai).
+Complete guide for using React Native HiFi with [OpenCode.ai](https://opencode.ai).
 
 ## Quick Install
 
 Tell OpenCode:
 
 ```
-Clone https://github.com/react-native-vibe-code/react-native-space to ~/.config/opencode/react-native-space, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/react-native-space/.opencode/plugins/react-native-space.js to ~/.config/opencode/plugins/react-native-space.js, then symlink ~/.config/opencode/react-native-space/skills to ~/.config/opencode/skills/react-native-space, then restart opencode.
+Clone https://github.com/react-native-vibe-code/react-native-hifi to ~/.config/opencode/react-native-hifi, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/react-native-hifi/.opencode/plugins/react-native-hifi.js to ~/.config/opencode/plugins/react-native-hifi.js, then symlink ~/.config/opencode/react-native-hifi/skills to ~/.config/opencode/skills/react-native-hifi, then restart opencode.
 ```
 
 ## Manual Installation
@@ -20,23 +20,23 @@ Clone https://github.com/react-native-vibe-code/react-native-space to ~/.config/
 ### macOS / Linux
 
 ```bash
-# 1. Install React Native Space (or update existing)
-if [ -d ~/.config/opencode/react-native-space ]; then
-  cd ~/.config/opencode/react-native-space && git pull
+# 1. Install React Native HiFi (or update existing)
+if [ -d ~/.config/opencode/react-native-hifi ]; then
+  cd ~/.config/opencode/react-native-hifi && git pull
 else
-  git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.config/opencode/react-native-space
+  git clone https://github.com/react-native-vibe-code/react-native-hifi.git ~/.config/opencode/react-native-hifi
 fi
 
 # 2. Create directories
 mkdir -p ~/.config/opencode/plugins ~/.config/opencode/skills
 
 # 3. Remove old symlinks/directories if they exist
-rm -f ~/.config/opencode/plugins/react-native-space.js
-rm -rf ~/.config/opencode/skills/react-native-space
+rm -f ~/.config/opencode/plugins/react-native-hifi.js
+rm -rf ~/.config/opencode/skills/react-native-hifi
 
 # 4. Create symlinks
-ln -s ~/.config/opencode/react-native-space/.opencode/plugins/react-native-space.js ~/.config/opencode/plugins/react-native-space.js
-ln -s ~/.config/opencode/react-native-space/skills ~/.config/opencode/skills/react-native-space
+ln -s ~/.config/opencode/react-native-hifi/.opencode/plugins/react-native-hifi.js ~/.config/opencode/plugins/react-native-hifi.js
+ln -s ~/.config/opencode/react-native-hifi/skills ~/.config/opencode/skills/react-native-hifi
 
 # 5. Restart OpenCode
 ```
@@ -44,11 +44,11 @@ ln -s ~/.config/opencode/react-native-space/skills ~/.config/opencode/skills/rea
 #### Verify Installation
 
 ```bash
-ls -l ~/.config/opencode/plugins/react-native-space.js
-ls -l ~/.config/opencode/skills/react-native-space
+ls -l ~/.config/opencode/plugins/react-native-hifi.js
+ls -l ~/.config/opencode/skills/react-native-hifi
 ```
 
-Both should show symlinks pointing to the react-native-space directory.
+Both should show symlinks pointing to the react-native-hifi directory.
 
 ### Windows
 
@@ -65,22 +65,22 @@ Pick your shell below: [Command Prompt](#command-prompt) | [PowerShell](#powersh
 Run as Administrator, or with Developer Mode enabled:
 
 ```cmd
-:: 1. Install React Native Space
-git clone https://github.com/react-native-vibe-code/react-native-space.git "%USERPROFILE%\.config\opencode\react-native-space"
+:: 1. Install React Native HiFi
+git clone https://github.com/react-native-vibe-code/react-native-hifi.git "%USERPROFILE%\.config\opencode\react-native-hifi"
 
 :: 2. Create directories
 mkdir "%USERPROFILE%\.config\opencode\plugins" 2>nul
 mkdir "%USERPROFILE%\.config\opencode\skills" 2>nul
 
 :: 3. Remove existing links (safe for reinstalls)
-del "%USERPROFILE%\.config\opencode\plugins\react-native-space.js" 2>nul
-rmdir "%USERPROFILE%\.config\opencode\skills\react-native-space" 2>nul
+del "%USERPROFILE%\.config\opencode\plugins\react-native-hifi.js" 2>nul
+rmdir "%USERPROFILE%\.config\opencode\skills\react-native-hifi" 2>nul
 
 :: 4. Create plugin symlink (requires Developer Mode or Admin)
-mklink "%USERPROFILE%\.config\opencode\plugins\react-native-space.js" "%USERPROFILE%\.config\opencode\react-native-space\.opencode\plugins\react-native-space.js"
+mklink "%USERPROFILE%\.config\opencode\plugins\react-native-hifi.js" "%USERPROFILE%\.config\opencode\react-native-hifi\.opencode\plugins\react-native-hifi.js"
 
 :: 5. Create skills junction (works without special privileges)
-mklink /J "%USERPROFILE%\.config\opencode\skills\react-native-space" "%USERPROFILE%\.config\opencode\react-native-space\skills"
+mklink /J "%USERPROFILE%\.config\opencode\skills\react-native-hifi" "%USERPROFILE%\.config\opencode\react-native-hifi\skills"
 
 :: 6. Restart OpenCode
 ```
@@ -90,22 +90,22 @@ mklink /J "%USERPROFILE%\.config\opencode\skills\react-native-space" "%USERPROFI
 Run as Administrator, or with Developer Mode enabled:
 
 ```powershell
-# 1. Install React Native Space
-git clone https://github.com/react-native-vibe-code/react-native-space.git "$env:USERPROFILE\.config\opencode\react-native-space"
+# 1. Install React Native HiFi
+git clone https://github.com/react-native-vibe-code/react-native-hifi.git "$env:USERPROFILE\.config\opencode\react-native-hifi"
 
 # 2. Create directories
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.config\opencode\plugins"
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.config\opencode\skills"
 
 # 3. Remove existing links (safe for reinstalls)
-Remove-Item "$env:USERPROFILE\.config\opencode\plugins\react-native-space.js" -Force -ErrorAction SilentlyContinue
-Remove-Item "$env:USERPROFILE\.config\opencode\skills\react-native-space" -Force -ErrorAction SilentlyContinue
+Remove-Item "$env:USERPROFILE\.config\opencode\plugins\react-native-hifi.js" -Force -ErrorAction SilentlyContinue
+Remove-Item "$env:USERPROFILE\.config\opencode\skills\react-native-hifi" -Force -ErrorAction SilentlyContinue
 
 # 4. Create plugin symlink (requires Developer Mode or Admin)
-New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.config\opencode\plugins\react-native-space.js" -Target "$env:USERPROFILE\.config\opencode\react-native-space\.opencode\plugins\react-native-space.js"
+New-Item -ItemType SymbolicLink -Path "$env:USERPROFILE\.config\opencode\plugins\react-native-hifi.js" -Target "$env:USERPROFILE\.config\opencode\react-native-hifi\.opencode\plugins\react-native-hifi.js"
 
 # 5. Create skills junction (works without special privileges)
-New-Item -ItemType Junction -Path "$env:USERPROFILE\.config\opencode\skills\react-native-space" -Target "$env:USERPROFILE\.config\opencode\react-native-space\skills"
+New-Item -ItemType Junction -Path "$env:USERPROFILE\.config\opencode\skills\react-native-hifi" -Target "$env:USERPROFILE\.config\opencode\react-native-hifi\skills"
 
 # 6. Restart OpenCode
 ```
@@ -115,21 +115,21 @@ New-Item -ItemType Junction -Path "$env:USERPROFILE\.config\opencode\skills\reac
 Note: Git Bash's native `ln` command copies files instead of creating symlinks. Use `cmd //c mklink` instead (the `//c` is Git Bash syntax for `/c`).
 
 ```bash
-# 1. Install React Native Space
-git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.config/opencode/react-native-space
+# 1. Install React Native HiFi
+git clone https://github.com/react-native-vibe-code/react-native-hifi.git ~/.config/opencode/react-native-hifi
 
 # 2. Create directories
 mkdir -p ~/.config/opencode/plugins ~/.config/opencode/skills
 
 # 3. Remove existing links (safe for reinstalls)
-rm -f ~/.config/opencode/plugins/react-native-space.js 2>/dev/null
-rm -rf ~/.config/opencode/skills/react-native-space 2>/dev/null
+rm -f ~/.config/opencode/plugins/react-native-hifi.js 2>/dev/null
+rm -rf ~/.config/opencode/skills/react-native-hifi 2>/dev/null
 
 # 4. Create plugin symlink (requires Developer Mode or Admin)
-cmd //c "mklink \"$(cygpath -w ~/.config/opencode/plugins/react-native-space.js)\" \"$(cygpath -w ~/.config/opencode/react-native-space/.opencode/plugins/react-native-space.js)\""
+cmd //c "mklink \"$(cygpath -w ~/.config/opencode/plugins/react-native-hifi.js)\" \"$(cygpath -w ~/.config/opencode/react-native-hifi/.opencode/plugins/react-native-hifi.js)\""
 
 # 5. Create skills junction (works without special privileges)
-cmd //c "mklink /J \"$(cygpath -w ~/.config/opencode/skills/react-native-space)\" \"$(cygpath -w ~/.config/opencode/react-native-space/skills)\""
+cmd //c "mklink /J \"$(cygpath -w ~/.config/opencode/skills/react-native-hifi)\" \"$(cygpath -w ~/.config/opencode/react-native-hifi/skills)\""
 
 # 6. Restart OpenCode
 ```
@@ -181,7 +181,7 @@ use skill tool to list skills
 Use OpenCode's native `skill` tool to load a specific skill:
 
 ```
-use skill tool to load react-native-space/brainstorming
+use skill tool to load react-native-hifi/brainstorming
 ```
 
 ### Personal Skills
@@ -233,17 +233,17 @@ OpenCode discovers skills from these locations:
 
 1. **Project skills** (`.opencode/skills/`) - Highest priority
 2. **Personal skills** (`~/.config/opencode/skills/`)
-3. **React Native Space skills** (`~/.config/opencode/skills/react-native-space/`) - via symlink
+3. **React Native HiFi skills** (`~/.config/opencode/skills/react-native-hifi/`) - via symlink
 
 ## Features
 
 ### Automatic Context Injection
 
-The plugin automatically injects React Native Space context via the `experimental.chat.system.transform` hook. This adds the "using-react-native-space" skill content to the system prompt on every request.
+The plugin automatically injects React Native HiFi context via the `experimental.chat.system.transform` hook. This adds the "using-react-native-hifi" skill content to the system prompt on every request.
 
 ### Native Skills Integration
 
-React Native Space uses OpenCode's native `skill` tool for skill discovery and loading. Skills are symlinked into `~/.config/opencode/skills/react-native-space/` so they appear alongside your personal and project skills.
+React Native HiFi uses OpenCode's native `skill` tool for skill discovery and loading. Skills are symlinked into `~/.config/opencode/skills/react-native-hifi/` so they appear alongside your personal and project skills.
 
 ### Tool Mapping
 
@@ -258,22 +258,22 @@ Skills written for Claude Code are automatically adapted for OpenCode. The boots
 
 ### Plugin Structure
 
-**Location:** `~/.config/opencode/react-native-space/.opencode/plugins/react-native-space.js`
+**Location:** `~/.config/opencode/react-native-hifi/.opencode/plugins/react-native-hifi.js`
 
 **Components:**
 - `experimental.chat.system.transform` hook for bootstrap injection
-- Reads and injects the "using-react-native-space" skill content
+- Reads and injects the "using-react-native-hifi" skill content
 
 ### Skills
 
-**Location:** `~/.config/opencode/skills/react-native-space/` (symlink to `~/.config/opencode/react-native-space/skills/`)
+**Location:** `~/.config/opencode/skills/react-native-hifi/` (symlink to `~/.config/opencode/react-native-hifi/skills/`)
 
 Skills are discovered by OpenCode's native skill system. Each skill has a `SKILL.md` file with YAML frontmatter.
 
 ## Updating
 
 ```bash
-cd ~/.config/opencode/react-native-space
+cd ~/.config/opencode/react-native-hifi
 git pull
 ```
 
@@ -283,14 +283,14 @@ Restart OpenCode to load the updates.
 
 ### Plugin not loading
 
-1. Check plugin exists: `ls ~/.config/opencode/react-native-space/.opencode/plugins/react-native-space.js`
+1. Check plugin exists: `ls ~/.config/opencode/react-native-hifi/.opencode/plugins/react-native-hifi.js`
 2. Check symlink/junction: `ls -l ~/.config/opencode/plugins/` (macOS/Linux) or `dir /AL %USERPROFILE%\.config\opencode\plugins` (Windows)
 3. Check OpenCode logs: `opencode run "test" --print-logs --log-level DEBUG`
 4. Look for plugin loading message in logs
 
 ### Skills not found
 
-1. Verify skills symlink: `ls -l ~/.config/opencode/skills/react-native-space` (should point to react-native-space/skills/)
+1. Verify skills symlink: `ls -l ~/.config/opencode/skills/react-native-hifi` (should point to react-native-hifi/skills/)
 2. Use OpenCode's `skill` tool to list available skills
 3. Check skill structure: each skill needs a `SKILL.md` file with valid frontmatter
 
@@ -302,14 +302,14 @@ If you see `Cannot find module` errors on Windows:
 
 ### Bootstrap not appearing
 
-1. Verify using-react-native-space skill exists: `ls ~/.config/opencode/react-native-space/skills/using-react-native-space/SKILL.md`
+1. Verify using-react-native-hifi skill exists: `ls ~/.config/opencode/react-native-hifi/skills/using-react-native-hifi/SKILL.md`
 2. Check OpenCode version supports `experimental.chat.system.transform` hook
 3. Restart OpenCode after plugin changes
 
 ## Getting Help
 
-- Report issues: https://github.com/react-native-vibe-code/react-native-space/issues
-- Main documentation: https://github.com/react-native-vibe-code/react-native-space
+- Report issues: https://github.com/react-native-vibe-code/react-native-hifi/issues
+- Main documentation: https://github.com/react-native-vibe-code/react-native-hifi
 - OpenCode docs: https://opencode.ai/docs/
 
 ## Testing
@@ -318,13 +318,13 @@ Verify your installation:
 
 ```bash
 # Check plugin loads
-opencode run --print-logs "hello" 2>&1 | grep -i react-native-space
+opencode run --print-logs "hello" 2>&1 | grep -i react-native-hifi
 
 # Check skills are discoverable
-opencode run "use skill tool to list all skills" 2>&1 | grep -i react-native-space
+opencode run "use skill tool to list all skills" 2>&1 | grep -i react-native-hifi
 
 # Check bootstrap injection
 opencode run "what skills do you have?"
 ```
 
-The agent should mention having React Native Space skills and be able to list skills from `react-native-space/`.
+The agent should mention having React Native HiFi skills and be able to list skills from `react-native-hifi/`.

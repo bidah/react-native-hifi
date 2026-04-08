@@ -1,13 +1,13 @@
-# React Native Space for Codex
+# React Native HiFi for Codex
 
-Guide for using React Native Space with OpenAI Codex via native skill discovery.
+Guide for using React Native HiFi with OpenAI Codex via native skill discovery.
 
 ## Quick Install
 
 Tell Codex:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/react-native-space/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/react-native-hifi/refs/heads/main/.codex/INSTALL.md
 ```
 
 ## Manual Installation
@@ -21,13 +21,13 @@ Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/r
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.codex/react-native-space
+   git clone https://github.com/react-native-vibe-code/react-native-hifi.git ~/.codex/react-native-hifi
    ```
 
 2. Create the skills symlink:
    ```bash
    mkdir -p ~/.agents/skills
-   ln -s ~/.codex/react-native-space/skills ~/.agents/skills/react-native-space
+   ln -s ~/.codex/react-native-hifi/skills ~/.agents/skills/react-native-hifi
    ```
 
 3. Restart Codex.
@@ -44,25 +44,25 @@ Use a junction instead of a symlink (works without Developer Mode):
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
-cmd /c mklink /J "$env:USERPROFILE\.agents\skills\react-native-space" "$env:USERPROFILE\.codex\react-native-space\skills"
+cmd /c mklink /J "$env:USERPROFILE\.agents\skills\react-native-hifi" "$env:USERPROFILE\.codex\react-native-hifi\skills"
 ```
 
 ## How It Works
 
-Codex has native skill discovery — it scans `~/.agents/skills/` at startup, parses SKILL.md frontmatter, and loads skills on demand. React Native Space skills are made visible through a single symlink:
+Codex has native skill discovery — it scans `~/.agents/skills/` at startup, parses SKILL.md frontmatter, and loads skills on demand. React Native HiFi skills are made visible through a single symlink:
 
 ```
-~/.agents/skills/react-native-space/ → ~/.codex/react-native-space/skills/
+~/.agents/skills/react-native-hifi/ → ~/.codex/react-native-hifi/skills/
 ```
 
-The `using-react-native-space` skill is discovered automatically and enforces skill usage discipline — no additional configuration needed.
+The `using-react-native-hifi` skill is discovered automatically and enforces skill usage discipline — no additional configuration needed.
 
 ## Usage
 
 Skills are discovered automatically. Codex activates them when:
 - You mention a skill by name (e.g., "use brainstorming")
 - The task matches a skill's description
-- The `using-react-native-space` skill directs Codex to use one
+- The `using-react-native-hifi` skill directs Codex to use one
 
 ### Personal Skills
 
@@ -90,7 +90,7 @@ The `description` field is how Codex decides when to activate a skill automatica
 ## Updating
 
 ```bash
-cd ~/.codex/react-native-space && git pull
+cd ~/.codex/react-native-hifi && git pull
 ```
 
 Skills update instantly through the symlink.
@@ -98,22 +98,22 @@ Skills update instantly through the symlink.
 ## Uninstalling
 
 ```bash
-rm ~/.agents/skills/react-native-space
+rm ~/.agents/skills/react-native-hifi
 ```
 
 **Windows (PowerShell):**
 ```powershell
-Remove-Item "$env:USERPROFILE\.agents\skills\react-native-space"
+Remove-Item "$env:USERPROFILE\.agents\skills\react-native-hifi"
 ```
 
-Optionally delete the clone: `rm -rf ~/.codex/react-native-space` (Windows: `Remove-Item -Recurse -Force "$env:USERPROFILE\.codex\react-native-space"`).
+Optionally delete the clone: `rm -rf ~/.codex/react-native-hifi` (Windows: `Remove-Item -Recurse -Force "$env:USERPROFILE\.codex\react-native-hifi"`).
 
 ## Troubleshooting
 
 ### Skills not showing up
 
-1. Verify the symlink: `ls -la ~/.agents/skills/react-native-space`
-2. Check skills exist: `ls ~/.codex/react-native-space/skills`
+1. Verify the symlink: `ls -la ~/.agents/skills/react-native-hifi`
+2. Check skills exist: `ls ~/.codex/react-native-hifi/skills`
 3. Restart Codex — skills are discovered at startup
 
 ### Windows junction issues
@@ -122,5 +122,5 @@ Junctions normally work without special permissions. If creation fails, try runn
 
 ## Getting Help
 
-- Report issues: https://github.com/react-native-vibe-code/react-native-space/issues
-- Main documentation: https://github.com/react-native-vibe-code/react-native-space
+- Report issues: https://github.com/react-native-vibe-code/react-native-hifi/issues
+- Main documentation: https://github.com/react-native-vibe-code/react-native-hifi

@@ -1,13 +1,13 @@
 {
-  "name": "react-native-space-dev",
-  "description": "Development marketplace for React Native Space skills library",
+  "name": "react-native-hifi-dev",
+  "description": "Development marketplace for React Native HiFi skills library",
   "owner": {
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
   },
   "plugins": [
     {
-      "name": "react-native-space",
+      "name": "react-native-hifi",
       "description": "React Native & Expo development workflow: skills library for Claude Code with TDD, debugging, collaboration patterns, and proven techniques",
       "version": "5.0.2",
       "source": "./",

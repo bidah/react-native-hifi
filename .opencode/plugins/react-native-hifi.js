@@ -1,7 +1,7 @@
 /**
- * React Native Space plugin for OpenCode.ai
+ * React Native HiFi plugin for OpenCode.ai
  *
- * Injects react-native-space bootstrap context via system prompt transform.
+ * Injects react-native-hifi bootstrap context via system prompt transform.
  * Skills are discovered via OpenCode's native skill tool from symlinked directory.
  */
 
@@ -54,8 +54,8 @@ export const ReactNativeDrillPlugin = async ({ client, directory }) => {
 
   // Helper to generate bootstrap content
   const getBootstrapContent = () => {
-    // Try to load using-react-native-space skill
-    const skillPath = path.join(reactNativeDrillSkillsDir, 'using-react-native-space', 'SKILL.md');
+    // Try to load using-react-native-hifi skill
+    const skillPath = path.join(reactNativeDrillSkillsDir, 'using-react-native-hifi', 'SKILL.md');
     if (!fs.existsSync(skillPath)) return null;
 
     const fullContent = fs.readFileSync(skillPath, 'utf8');
@@ -69,13 +69,13 @@ When skills reference tools you don't have, substitute OpenCode equivalents:
 - \`Read\`, \`Write\`, \`Edit\`, \`Bash\` → Your native tools
 
 **Skills location:**
-React Native Space skills are in \`${configDir}/skills/react-native-space/\`
+React Native HiFi skills are in \`${configDir}/skills/react-native-hifi/\`
 Use OpenCode's native \`skill\` tool to list and load skills.`;
 
     return `<EXTREMELY_IMPORTANT>
-You have react-native-space.
+You have react-native-hifi.
 
-**IMPORTANT: The using-react-native-space skill content is included below. It is ALREADY LOADED - you are currently following it. Do NOT use the skill tool to load "using-react-native-space" again - that would be redundant.**
+**IMPORTANT: The using-react-native-hifi skill content is included below. It is ALREADY LOADED - you are currently following it. Do NOT use the skill tool to load "using-react-native-hifi" again - that would be redundant.**
 
 ${content}
 

@@ -1,8 +1,8 @@
 # OpenCode Support Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use react-native-space:executing-plans to implement this plan task-by-task.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use react-native-hifi:executing-plans to implement this plan task-by-task.
 
-**Goal:** Add full react-native-space support for OpenCode.ai with a native JavaScript plugin that shares core functionality with the existing Codex implementation.
+**Goal:** Add full react-native-hifi support for OpenCode.ai with a native JavaScript plugin that shares core functionality with the existing Codex implementation.
 
 **Architecture:** Extract common skill discovery/parsing logic into `lib/skills-core.js`, refactor Codex to use it, then build OpenCode plugin using their native plugin API with custom tools and session hooks.
 
@@ -16,7 +16,7 @@
 
 **Files:**
 - Create: `lib/skills-core.js`
-- Reference: `.codex/react-native-space-codex` (lines 40-74)
+- Reference: `.codex/react-native-hifi-codex` (lines 40-74)
 
 **Step 1: Create lib/skills-core.js with extractFrontmatter function**
 
@@ -98,7 +98,7 @@ git commit -m "feat: create shared skills core module with frontmatter parser"
 
 **Files:**
 - Modify: `lib/skills-core.js`
-- Reference: `.codex/react-native-space-codex` (lines 97-136)
+- Reference: `.codex/react-native-hifi-codex` (lines 97-136)
 
 **Step 1: Add findSkillsInDir function to skills-core.js**
 
@@ -109,7 +109,7 @@ Add before `module.exports`:
  * Find all SKILL.md files in a directory recursively.
  *
  * @param {string} dir - Directory to search
- * @param {string} sourceType - 'personal' or 'react-native-space' for namespacing
+ * @param {string} sourceType - 'personal' or 'react-native-hifi' for namespacing
  * @param {number} maxDepth - Maximum recursion depth (default: 3)
  * @returns {Array<{path: string, name: string, description: string, sourceType: string}>}
  */
@@ -180,7 +180,7 @@ git commit -m "feat: add skill discovery function to core module"
 
 **Files:**
 - Modify: `lib/skills-core.js`
-- Reference: `.codex/react-native-space-codex` (lines 212-280)
+- Reference: `.codex/react-native-hifi-codex` (lines 212-280)
 
 **Step 1: Add resolveSkillPath function**
 
@@ -189,20 +189,20 @@ Add before `module.exports`:
 ```javascript
 /**
  * Resolve a skill name to its file path, handling shadowing
- * (personal skills override react-native-space skills).
+ * (personal skills override react-native-hifi skills).
  *
- * @param {string} skillName - Name like "react-native-space:brainstorming" or "my-skill"
- * @param {string} react-native-spaceDir - Path to react-native-space skills directory
+ * @param {string} skillName - Name like "react-native-hifi:brainstorming" or "my-skill"
+ * @param {string} react-native-hifiDir - Path to react-native-hifi skills directory
  * @param {string} personalDir - Path to personal skills directory
  * @returns {{skillFile: string, sourceType: string, skillPath: string} | null}
  */
-function resolveSkillPath(skillName, react-native-spaceDir, personalDir) {
-    // Strip react-native-space: prefix if present
-    const forceReact Native Space = skillName.startsWith('react-native-space:');
-    const actualSkillName = forceReact Native Space ? skillName.replace(/^react-native-space:/, '') : skillName;
+function resolveSkillPath(skillName, react-native-hifiDir, personalDir) {
+    // Strip react-native-hifi: prefix if present
+    const forceReact Native HiFi = skillName.startsWith('react-native-hifi:');
+    const actualSkillName = forceReact Native HiFi ? skillName.replace(/^react-native-hifi:/, '') : skillName;
 
-    // Try personal skills first (unless explicitly react-native-space:)
-    if (!forceReact Native Space && personalDir) {
+    // Try personal skills first (unless explicitly react-native-hifi:)
+    if (!forceReact Native HiFi && personalDir) {
         const personalPath = path.join(personalDir, actualSkillName);
         const personalSkillFile = path.join(personalPath, 'SKILL.md');
         if (fs.existsSync(personalSkillFile)) {
@@ -214,14 +214,14 @@ function resolveSkillPath(skillName, react-native-spaceDir, personalDir) {
         }
     }
 
-    // Try react-native-space skills
-    if (react-native-spaceDir) {
-        const react-native-spacePath = path.join(react-native-spaceDir, actualSkillName);
-        const react-native-spaceSkillFile = path.join(react-native-spacePath, 'SKILL.md');
-        if (fs.existsSync(react-native-spaceSkillFile)) {
+    // Try react-native-hifi skills
+    if (react-native-hifiDir) {
+        const react-native-hifiPath = path.join(react-native-hifiDir, actualSkillName);
+        const react-native-hifiSkillFile = path.join(react-native-hifiPath, 'SKILL.md');
+        if (fs.existsSync(react-native-hifiSkillFile)) {
             return {
-                skillFile: react-native-spaceSkillFile,
-                sourceType: 'react-native-space',
+                skillFile: react-native-hifiSkillFile,
+                sourceType: 'react-native-hifi',
                 skillPath: actualSkillName
             };
         }
@@ -259,7 +259,7 @@ git commit -m "feat: add skill path resolution with shadowing support"
 
 **Files:**
 - Modify: `lib/skills-core.js`
-- Reference: `.codex/react-native-space-codex` (lines 16-38)
+- Reference: `.codex/react-native-hifi-codex` (lines 16-38)
 
 **Step 1: Add checkForUpdates function**
 
@@ -333,7 +333,7 @@ git commit -m "feat: add git update checking to core module"
 ### Task 5: Update Codex to Import Shared Core
 
 **Files:**
-- Modify: `.codex/react-native-space-codex` (add import at top)
+- Modify: `.codex/react-native-hifi-codex` (add import at top)
 
 **Step 1: Add import statement**
 
@@ -345,13 +345,13 @@ const skillsCore = require('../lib/skills-core');
 
 **Step 2: Verify syntax**
 
-Run: `node -c .codex/react-native-space-codex`
+Run: `node -c .codex/react-native-hifi-codex`
 Expected: No output
 
 **Step 3: Commit**
 
 ```bash
-git add .codex/react-native-space-codex
+git add .codex/react-native-hifi-codex
 git commit -m "refactor: import shared skills core in codex"
 ```
 
@@ -360,7 +360,7 @@ git commit -m "refactor: import shared skills core in codex"
 ### Task 6: Replace extractFrontmatter with Core Version
 
 **Files:**
-- Modify: `.codex/react-native-space-codex` (lines 40-74)
+- Modify: `.codex/react-native-hifi-codex` (lines 40-74)
 
 **Step 1: Remove local extractFrontmatter function**
 
@@ -374,13 +374,13 @@ Affected lines approximately: 90, 310
 
 **Step 3: Verify script still works**
 
-Run: `.codex/react-native-space-codex find-skills | head -20`
+Run: `.codex/react-native-hifi-codex find-skills | head -20`
 Expected: Shows list of skills
 
 **Step 4: Commit**
 
 ```bash
-git add .codex/react-native-space-codex
+git add .codex/react-native-hifi-codex
 git commit -m "refactor: use shared extractFrontmatter in codex"
 ```
 
@@ -389,7 +389,7 @@ git commit -m "refactor: use shared extractFrontmatter in codex"
 ### Task 7: Replace findSkillsInDir with Core Version
 
 **Files:**
-- Modify: `.codex/react-native-space-codex` (lines 97-136, approximately)
+- Modify: `.codex/react-native-hifi-codex` (lines 97-136, approximately)
 
 **Step 1: Remove local findSkillsInDir function**
 
@@ -401,13 +401,13 @@ Replace calls from `findSkillsInDir(` to `skillsCore.findSkillsInDir(`
 
 **Step 3: Verify script still works**
 
-Run: `.codex/react-native-space-codex find-skills | head -20`
+Run: `.codex/react-native-hifi-codex find-skills | head -20`
 Expected: Shows list of skills
 
 **Step 4: Commit**
 
 ```bash
-git add .codex/react-native-space-codex
+git add .codex/react-native-hifi-codex
 git commit -m "refactor: use shared findSkillsInDir in codex"
 ```
 
@@ -416,7 +416,7 @@ git commit -m "refactor: use shared findSkillsInDir in codex"
 ### Task 8: Replace checkForUpdates with Core Version
 
 **Files:**
-- Modify: `.codex/react-native-space-codex` (lines 16-38, approximately)
+- Modify: `.codex/react-native-hifi-codex` (lines 16-38, approximately)
 
 **Step 1: Remove local checkForUpdates function**
 
@@ -428,13 +428,13 @@ Replace calls from `checkForUpdates(` to `skillsCore.checkForUpdates(`
 
 **Step 3: Verify script still works**
 
-Run: `.codex/react-native-space-codex bootstrap | head -50`
+Run: `.codex/react-native-hifi-codex bootstrap | head -50`
 Expected: Shows bootstrap content
 
 **Step 4: Commit**
 
 ```bash
-git add .codex/react-native-space-codex
+git add .codex/react-native-hifi-codex
 git commit -m "refactor: use shared checkForUpdates in codex"
 ```
 
@@ -445,7 +445,7 @@ git commit -m "refactor: use shared checkForUpdates in codex"
 ### Task 9: Create OpenCode Plugin Directory Structure
 
 **Files:**
-- Create: `.opencode/plugin/react-native-space.js`
+- Create: `.opencode/plugin/react-native-hifi.js`
 
 **Step 1: Create directory**
 
@@ -457,7 +457,7 @@ Run: `mkdir -p .opencode/plugin`
 #!/usr/bin/env node
 
 /**
- * React Native Space plugin for OpenCode.ai
+ * React Native HiFi plugin for OpenCode.ai
  *
  * Provides custom tools for loading and discovering skills,
  * with automatic bootstrap on session start.
@@ -469,13 +469,13 @@ const fs = require('fs');
 const os = require('os');
 
 const homeDir = os.homedir();
-const react-native-spaceSkillsDir = path.join(homeDir, '.config/opencode/react-native-space/skills');
+const react-native-hifiSkillsDir = path.join(homeDir, '.config/opencode/react-native-hifi/skills');
 const personalSkillsDir = path.join(homeDir, '.config/opencode/skills');
 
 /**
  * OpenCode plugin entry point
  */
-export const React Native SpacePlugin = async ({ project, client, $, directory, worktree }) => {
+export const React Native HiFiPlugin = async ({ project, client, $, directory, worktree }) => {
   return {
     // Custom tools and hooks will go here
   };
@@ -484,13 +484,13 @@ export const React Native SpacePlugin = async ({ project, client, $, directory, 
 
 **Step 3: Verify file was created**
 
-Run: `ls -l .opencode/plugin/react-native-space.js`
+Run: `ls -l .opencode/plugin/react-native-hifi.js`
 Expected: File exists
 
 **Step 4: Commit**
 
 ```bash
-git add .opencode/plugin/react-native-space.js
+git add .opencode/plugin/react-native-hifi.js
 git commit -m "feat: create opencode plugin scaffold"
 ```
 
@@ -499,14 +499,14 @@ git commit -m "feat: create opencode plugin scaffold"
 ### Task 10: Implement use_skill Tool
 
 **Files:**
-- Modify: `.opencode/plugin/react-native-space.js`
+- Modify: `.opencode/plugin/react-native-hifi.js`
 
 **Step 1: Add use_skill tool implementation**
 
 Replace the plugin return statement with:
 
 ```javascript
-export const React Native SpacePlugin = async ({ project, client, $, directory, worktree }) => {
+export const React Native HiFiPlugin = async ({ project, client, $, directory, worktree }) => {
   // Import zod for schema validation
   const { z } = await import('zod');
 
@@ -516,13 +516,13 @@ export const React Native SpacePlugin = async ({ project, client, $, directory, 
         name: 'use_skill',
         description: 'Load and read a specific skill to guide your work. Skills contain proven workflows, mandatory processes, and expert techniques.',
         schema: z.object({
-          skill_name: z.string().describe('Name of the skill to load (e.g., "react-native-space:brainstorming" or "my-custom-skill")')
+          skill_name: z.string().describe('Name of the skill to load (e.g., "react-native-hifi:brainstorming" or "my-custom-skill")')
         }),
         execute: async ({ skill_name }) => {
-          // Resolve skill path (handles shadowing: personal > react-native-space)
+          // Resolve skill path (handles shadowing: personal > react-native-hifi)
           const resolved = skillsCore.resolveSkillPath(
             skill_name,
-            react-native-spaceSkillsDir,
+            react-native-hifiSkillsDir,
             personalSkillsDir
           );
 
@@ -574,13 +574,13 @@ ${content}`;
 
 **Step 2: Verify syntax**
 
-Run: `node -c .opencode/plugin/react-native-space.js`
+Run: `node -c .opencode/plugin/react-native-hifi.js`
 Expected: No output
 
 **Step 3: Commit**
 
 ```bash
-git add .opencode/plugin/react-native-space.js
+git add .opencode/plugin/react-native-hifi.js
 git commit -m "feat: implement use_skill tool for opencode"
 ```
 
@@ -589,7 +589,7 @@ git commit -m "feat: implement use_skill tool for opencode"
 ### Task 11: Implement find_skills Tool
 
 **Files:**
-- Modify: `.opencode/plugin/react-native-space.js`
+- Modify: `.opencode/plugin/react-native-hifi.js`
 
 **Step 1: Add find_skills tool to tools array**
 
@@ -598,13 +598,13 @@ Add after the use_skill tool definition, before closing the tools array:
 ```javascript
       {
         name: 'find_skills',
-        description: 'List all available skills in the react-native-space and personal skill libraries.',
+        description: 'List all available skills in the react-native-hifi and personal skill libraries.',
         schema: z.object({}),
         execute: async () => {
           // Find skills in both directories
-          const react-native-spaceSkills = skillsCore.findSkillsInDir(
-            react-native-spaceSkillsDir,
-            'react-native-space',
+          const react-native-hifiSkills = skillsCore.findSkillsInDir(
+            react-native-hifiSkillsDir,
+            'react-native-hifi',
             3
           );
           const personalSkills = skillsCore.findSkillsInDir(
@@ -614,16 +614,16 @@ Add after the use_skill tool definition, before closing the tools array:
           );
 
           // Combine and format skills list
-          const allSkills = [...personalSkills, ...react-native-spaceSkills];
+          const allSkills = [...personalSkills, ...react-native-hifiSkills];
 
           if (allSkills.length === 0) {
-            return 'No skills found. Install react-native-space skills to ~/.config/opencode/react-native-space/skills/';
+            return 'No skills found. Install react-native-hifi skills to ~/.config/opencode/react-native-hifi/skills/';
           }
 
           let output = 'Available skills:\n\n';
 
           for (const skill of allSkills) {
-            const namespace = skill.sourceType === 'personal' ? '' : 'react-native-space:';
+            const namespace = skill.sourceType === 'personal' ? '' : 'react-native-hifi:';
             const skillName = skill.name || path.basename(skill.path);
 
             output += `${namespace}${skillName}\n`;
@@ -640,13 +640,13 @@ Add after the use_skill tool definition, before closing the tools array:
 
 **Step 2: Verify syntax**
 
-Run: `node -c .opencode/plugin/react-native-space.js`
+Run: `node -c .opencode/plugin/react-native-hifi.js`
 Expected: No output
 
 **Step 3: Commit**
 
 ```bash
-git add .opencode/plugin/react-native-space.js
+git add .opencode/plugin/react-native-hifi.js
 git commit -m "feat: implement find_skills tool for opencode"
 ```
 
@@ -655,7 +655,7 @@ git commit -m "feat: implement find_skills tool for opencode"
 ### Task 12: Implement Session Start Hook
 
 **Files:**
-- Modify: `.opencode/plugin/react-native-space.js`
+- Modify: `.opencode/plugin/react-native-hifi.js`
 
 **Step 1: Add session.started hook**
 
@@ -663,16 +663,16 @@ After the tools array, add:
 
 ```javascript
     'session.started': async () => {
-      // Read using-react-native-space skill content
-      const usingReact Native SpacePath = skillsCore.resolveSkillPath(
-        'using-react-native-space',
-        react-native-spaceSkillsDir,
+      // Read using-react-native-hifi skill content
+      const usingReact Native HiFiPath = skillsCore.resolveSkillPath(
+        'using-react-native-hifi',
+        react-native-hifiSkillsDir,
         personalSkillsDir
       );
 
-      let usingReact Native SpaceContent = '';
-      if (usingReact Native SpacePath) {
-        const fullContent = fs.readFileSync(usingReact Native SpacePath.skillFile, 'utf8');
+      let usingReact Native HiFiContent = '';
+      if (usingReact Native HiFiPath) {
+        const fullContent = fs.readFileSync(usingReact Native HiFiPath.skillFile, 'utf8');
         // Strip frontmatter
         const lines = fullContent.split('\n');
         let inFrontmatter = false;
@@ -694,7 +694,7 @@ After the tools array, add:
           }
         }
 
-        usingReact Native SpaceContent = contentLines.join('\n').trim();
+        usingReact Native HiFiContent = contentLines.join('\n').trim();
       }
 
       // Tool mapping instructions
@@ -712,28 +712,28 @@ When skills reference tools you don't have, substitute OpenCode equivalents:
 - Utilities and helpers specific to that skill
 
 **Skills naming:**
-- React Native Space skills: \`react-native-space:skill-name\` (from ~/.config/opencode/react-native-space/skills/)
+- React Native HiFi skills: \`react-native-hifi:skill-name\` (from ~/.config/opencode/react-native-hifi/skills/)
 - Personal skills: \`skill-name\` (from ~/.config/opencode/skills/)
-- Personal skills override react-native-space skills when names match
+- Personal skills override react-native-hifi skills when names match
 `;
 
       // Check for updates (non-blocking)
       const hasUpdates = skillsCore.checkForUpdates(
-        path.join(homeDir, '.config/opencode/react-native-space')
+        path.join(homeDir, '.config/opencode/react-native-hifi')
       );
 
       const updateNotice = hasUpdates ?
-        '\n\n⚠️ **Updates available!** Run `cd ~/.config/opencode/react-native-space && git pull` to update react-native-space.' :
+        '\n\n⚠️ **Updates available!** Run `cd ~/.config/opencode/react-native-hifi && git pull` to update react-native-hifi.' :
         '';
 
       // Return context to inject into session
       return {
         context: `<EXTREMELY_IMPORTANT>
-You have react-native-space.
+You have react-native-hifi.
 
-**Below is the full content of your 'react-native-space:using-react-native-space' skill - your introduction to using skills. For all other skills, use the 'use_skill' tool:**
+**Below is the full content of your 'react-native-hifi:using-react-native-hifi' skill - your introduction to using skills. For all other skills, use the 'use_skill' tool:**
 
-${usingReact Native SpaceContent}
+${usingReact Native HiFiContent}
 
 ${toolMapping}${updateNotice}
 </EXTREMELY_IMPORTANT>`
@@ -743,13 +743,13 @@ ${toolMapping}${updateNotice}
 
 **Step 2: Verify syntax**
 
-Run: `node -c .opencode/plugin/react-native-space.js`
+Run: `node -c .opencode/plugin/react-native-hifi.js`
 Expected: No output
 
 **Step 3: Commit**
 
 ```bash
-git add .opencode/plugin/react-native-space.js
+git add .opencode/plugin/react-native-hifi.js
 git commit -m "feat: implement session.started hook for opencode"
 ```
 
@@ -765,7 +765,7 @@ git commit -m "feat: implement session.started hook for opencode"
 **Step 1: Create installation guide**
 
 ```markdown
-# Installing React Native Space for OpenCode
+# Installing React Native HiFi for OpenCode
 
 ## Prerequisites
 
@@ -775,27 +775,27 @@ git commit -m "feat: implement session.started hook for opencode"
 
 ## Installation Steps
 
-### 1. Install React Native Space Skills
+### 1. Install React Native HiFi Skills
 
 ```bash
-# Clone react-native-space skills to OpenCode config directory
-mkdir -p ~/.config/opencode/react-native-space
-git clone https://github.com/react-native-vibe-code/react-native-space.git ~/.config/opencode/react-native-space
+# Clone react-native-hifi skills to OpenCode config directory
+mkdir -p ~/.config/opencode/react-native-hifi
+git clone https://github.com/react-native-vibe-code/react-native-hifi.git ~/.config/opencode/react-native-hifi
 ```
 
 ### 2. Install the Plugin
 
-The plugin is included in the react-native-space repository you just cloned.
+The plugin is included in the react-native-hifi repository you just cloned.
 
 OpenCode will automatically discover it from:
-- `~/.config/opencode/react-native-space/.opencode/plugin/react-native-space.js`
+- `~/.config/opencode/react-native-hifi/.opencode/plugin/react-native-hifi.js`
 
 Or you can link it to the project-local plugin directory:
 
 ```bash
 # In your OpenCode project
 mkdir -p .opencode/plugin
-ln -s ~/.config/opencode/react-native-space/.opencode/plugin/react-native-space.js .opencode/plugin/react-native-space.js
+ln -s ~/.config/opencode/react-native-hifi/.opencode/plugin/react-native-hifi.js .opencode/plugin/react-native-hifi.js
 ```
 
 ### 3. Restart OpenCode
@@ -803,7 +803,7 @@ ln -s ~/.config/opencode/react-native-space/.opencode/plugin/react-native-space.
 Restart OpenCode to load the plugin. On the next session, you should see:
 
 ```
-You have react-native-space.
+You have react-native-hifi.
 ```
 
 ## Usage
@@ -821,7 +821,7 @@ use find_skills tool
 Use the `use_skill` tool to load a specific skill:
 
 ```
-use use_skill tool with skill_name: "react-native-space:brainstorming"
+use use_skill tool with skill_name: "react-native-hifi:brainstorming"
 ```
 
 ### Personal Skills
@@ -845,12 +845,12 @@ description: Use when [condition] - [what it does]
 [Your skill content here]
 ```
 
-Personal skills override react-native-space skills with the same name.
+Personal skills override react-native-hifi skills with the same name.
 
 ## Updating
 
 ```bash
-cd ~/.config/opencode/react-native-space
+cd ~/.config/opencode/react-native-hifi
 git pull
 ```
 
@@ -858,13 +858,13 @@ git pull
 
 ### Plugin not loading
 
-1. Check plugin file exists: `ls ~/.config/opencode/react-native-space/.opencode/plugin/react-native-space.js`
+1. Check plugin file exists: `ls ~/.config/opencode/react-native-hifi/.opencode/plugin/react-native-hifi.js`
 2. Check OpenCode logs for errors
 3. Verify Node.js is installed: `node --version`
 
 ### Skills not found
 
-1. Verify skills directory exists: `ls ~/.config/opencode/react-native-space/skills`
+1. Verify skills directory exists: `ls ~/.config/opencode/react-native-hifi/skills`
 2. Use `find_skills` tool to see what's discovered
 3. Check file structure: each skill should have a `SKILL.md` file
 
@@ -878,8 +878,8 @@ When a skill references a Claude Code tool you don't have:
 
 ## Getting Help
 
-- Report issues: https://github.com/react-native-vibe-code/react-native-space/issues
-- Documentation: https://github.com/react-native-vibe-code/react-native-space
+- Report issues: https://github.com/react-native-vibe-code/react-native-hifi/issues
+- Documentation: https://github.com/react-native-vibe-code/react-native-hifi
 ```
 
 **Step 2: Verify file created**
@@ -908,7 +908,7 @@ Find the section about supported platforms (search for "Codex" in the file), and
 ```markdown
 ### OpenCode
 
-React Native Space works with [OpenCode.ai](https://opencode.ai) through a native JavaScript plugin.
+React Native HiFi works with [OpenCode.ai](https://opencode.ai) through a native JavaScript plugin.
 
 **Installation:** See [.opencode/INSTALL.md](.opencode/INSTALL.md)
 
@@ -982,21 +982,21 @@ git commit -m "docs: add opencode support to release notes"
 ### Task 16: Test Codex Still Works
 
 **Files:**
-- Test: `.codex/react-native-space-codex`
+- Test: `.codex/react-native-hifi-codex`
 
 **Step 1: Test find-skills command**
 
-Run: `.codex/react-native-space-codex find-skills | head -20`
+Run: `.codex/react-native-hifi-codex find-skills | head -20`
 Expected: Shows list of skills with names and descriptions
 
 **Step 2: Test use-skill command**
 
-Run: `.codex/react-native-space-codex use-skill react-native-space:brainstorming | head -20`
+Run: `.codex/react-native-hifi-codex use-skill react-native-hifi:brainstorming | head -20`
 Expected: Shows brainstorming skill content
 
 **Step 3: Test bootstrap command**
 
-Run: `.codex/react-native-space-codex bootstrap | head -30`
+Run: `.codex/react-native-hifi-codex bootstrap | head -30`
 Expected: Shows bootstrap content with instructions
 
 **Step 4: If all tests pass, record success**
@@ -1015,7 +1015,7 @@ No commit needed - this is verification only.
 Run:
 ```bash
 ls -l lib/skills-core.js
-ls -l .opencode/plugin/react-native-space.js
+ls -l .opencode/plugin/react-native-hifi.js
 ls -l .opencode/INSTALL.md
 ```
 
@@ -1029,7 +1029,7 @@ Expected:
 .opencode/
 ├── INSTALL.md
 └── plugin/
-    └── react-native-space.js
+    └── react-native-hifi.js
 ```
 
 **Step 3: If structure correct, proceed**
@@ -1057,8 +1057,8 @@ Expected: Shows all commits from this implementation
 
 Create a completion summary showing:
 - Total commits made
-- Files created: `lib/skills-core.js`, `.opencode/plugin/react-native-space.js`, `.opencode/INSTALL.md`
-- Files modified: `.codex/react-native-space-codex`, `README.md`, `RELEASE-NOTES.md`
+- Files created: `lib/skills-core.js`, `.opencode/plugin/react-native-hifi.js`, `.opencode/INSTALL.md`
+- Files modified: `.codex/react-native-hifi-codex`, `README.md`, `RELEASE-NOTES.md`
 - Testing performed: Codex commands verified
 - Ready for: Testing with actual OpenCode installation
 
@@ -1086,9 +1086,9 @@ These steps require OpenCode to be installed and are not part of the automated i
 ## Success Criteria
 
 - [ ] `lib/skills-core.js` created with all core functions
-- [ ] `.codex/react-native-space-codex` refactored to use shared core
+- [ ] `.codex/react-native-hifi-codex` refactored to use shared core
 - [ ] Codex commands still work (find-skills, use-skill, bootstrap)
-- [ ] `.opencode/plugin/react-native-space.js` created with tools and hooks
+- [ ] `.opencode/plugin/react-native-hifi.js` created with tools and hooks
 - [ ] Installation guide created
 - [ ] README and RELEASE-NOTES updated
 - [ ] All changes committed

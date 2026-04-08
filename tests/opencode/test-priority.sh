@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Test: Skill Priority Resolution
-# Verifies that skills are resolved with correct priority: project > personal > react-native-space
+# Verifies that skills are resolved with correct priority: project > personal > react-native-hifi
 # NOTE: These tests require OpenCode to be installed and configured
 set -euo pipefail
 
@@ -17,18 +17,18 @@ trap cleanup_test_env EXIT
 # Create same skill "priority-test" in all three locations with different markers
 echo "Setting up priority test fixtures..."
 
-# 1. Create in react-native-space location (lowest priority)
-mkdir -p "$HOME/.config/opencode/react-native-space/skills/priority-test"
-cat > "$HOME/.config/opencode/react-native-space/skills/priority-test/SKILL.md" <<'EOF'
+# 1. Create in react-native-hifi location (lowest priority)
+mkdir -p "$HOME/.config/opencode/react-native-hifi/skills/priority-test"
+cat > "$HOME/.config/opencode/react-native-hifi/skills/priority-test/SKILL.md" <<'EOF'
 ---
 name: priority-test
-description: React Native Space version of priority test skill
+description: React Native HiFi version of priority test skill
 ---
-# Priority Test Skill (React Native Space Version)
+# Priority Test Skill (React Native HiFi Version)
 
-This is the REACT_NATIVE_SPACE version of the priority test skill.
+This is the REACT_NATIVE_HIFI version of the priority test skill.
 
-PRIORITY_MARKER_REACT_NATIVE_SPACE_VERSION
+PRIORITY_MARKER_REACT_NATIVE_HIFI_VERSION
 EOF
 
 # 2. Create in personal location (medium priority)
@@ -65,10 +65,10 @@ echo "  Created priority-test skill in all three locations"
 echo ""
 echo "Test 1: Verifying test fixtures..."
 
-if [ -f "$HOME/.config/opencode/react-native-space/skills/priority-test/SKILL.md" ]; then
-    echo "  [PASS] React Native Space version exists"
+if [ -f "$HOME/.config/opencode/react-native-hifi/skills/priority-test/SKILL.md" ]; then
+    echo "  [PASS] React Native HiFi version exists"
 else
-    echo "  [FAIL] React Native Space version missing"
+    echo "  [FAIL] React Native HiFi version missing"
     exit 1
 fi
 
@@ -96,9 +96,9 @@ if ! command -v opencode &> /dev/null; then
     exit 0
 fi
 
-# Test 2: Test that personal overrides react-native-space
+# Test 2: Test that personal overrides react-native-hifi
 echo ""
-echo "Test 2: Testing personal > react-native-space priority..."
+echo "Test 2: Testing personal > react-native-hifi priority..."
 echo "  Running from outside project directory..."
 
 # Run from HOME (not in project) - should get personal version
@@ -112,19 +112,19 @@ output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load t
 }
 
 if echo "$output" | grep -qi "PRIORITY_MARKER_PERSONAL_VERSION"; then
-    echo "  [PASS] Personal version loaded (overrides react-native-space)"
-elif echo "$output" | grep -qi "PRIORITY_MARKER_REACT_NATIVE_SPACE_VERSION"; then
-    echo "  [FAIL] React Native Space version loaded instead of personal"
+    echo "  [PASS] Personal version loaded (overrides react-native-hifi)"
+elif echo "$output" | grep -qi "PRIORITY_MARKER_REACT_NATIVE_HIFI_VERSION"; then
+    echo "  [FAIL] React Native HiFi version loaded instead of personal"
     exit 1
 else
     echo "  [WARN] Could not verify priority marker in output"
     echo "  Output snippet:"
-    echo "$output" | grep -i "priority\|personal\|react-native-space" | head -10
+    echo "$output" | grep -i "priority\|personal\|react-native-hifi" | head -10
 fi
 
-# Test 3: Test that project overrides both personal and react-native-space
+# Test 3: Test that project overrides both personal and react-native-hifi
 echo ""
-echo "Test 3: Testing project > personal > react-native-space priority..."
+echo "Test 3: Testing project > personal > react-native-hifi priority..."
 echo "  Running from project directory..."
 
 # Run from project directory - should get project version
@@ -142,8 +142,8 @@ if echo "$output" | grep -qi "PRIORITY_MARKER_PROJECT_VERSION"; then
 elif echo "$output" | grep -qi "PRIORITY_MARKER_PERSONAL_VERSION"; then
     echo "  [FAIL] Personal version loaded instead of project"
     exit 1
-elif echo "$output" | grep -qi "PRIORITY_MARKER_REACT_NATIVE_SPACE_VERSION"; then
-    echo "  [FAIL] React Native Space version loaded instead of project"
+elif echo "$output" | grep -qi "PRIORITY_MARKER_REACT_NATIVE_HIFI_VERSION"; then
+    echo "  [FAIL] React Native HiFi version loaded instead of project"
     exit 1
 else
     echo "  [WARN] Could not verify priority marker in output"
@@ -151,12 +151,12 @@ else
     echo "$output" | grep -i "priority\|project\|personal" | head -10
 fi
 
-# Test 4: Test explicit react-native-space: prefix bypasses priority
+# Test 4: Test explicit react-native-hifi: prefix bypasses priority
 echo ""
-echo "Test 4: Testing react-native-space: prefix forces react-native-space version..."
+echo "Test 4: Testing react-native-hifi: prefix forces react-native-hifi version..."
 
 cd "$TEST_HOME/test-project"
-output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load react-native-space:priority-test specifically. Show me the exact content including any PRIORITY_MARKER text." 2>&1) || {
+output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load react-native-hifi:priority-test specifically. Show me the exact content including any PRIORITY_MARKER text." 2>&1) || {
     exit_code=$?
     if [ $exit_code -eq 124 ]; then
         echo "  [FAIL] OpenCode timed out after 60s"
@@ -164,10 +164,10 @@ output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load r
     fi
 }
 
-if echo "$output" | grep -qi "PRIORITY_MARKER_REACT_NATIVE_SPACE_VERSION"; then
-    echo "  [PASS] react-native-space: prefix correctly forces react-native-space version"
+if echo "$output" | grep -qi "PRIORITY_MARKER_REACT_NATIVE_HIFI_VERSION"; then
+    echo "  [PASS] react-native-hifi: prefix correctly forces react-native-hifi version"
 elif echo "$output" | grep -qi "PRIORITY_MARKER_PROJECT_VERSION\|PRIORITY_MARKER_PERSONAL_VERSION"; then
-    echo "  [FAIL] react-native-space: prefix did not force react-native-space version"
+    echo "  [FAIL] react-native-hifi: prefix did not force react-native-hifi version"
     exit 1
 else
     echo "  [WARN] Could not verify priority marker in output"

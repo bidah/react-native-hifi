@@ -1,6 +1,6 @@
 # Go Fractals CLI - Implementation Plan
 
-Execute this plan using the `react-native-space:subagent-driven-development` skill.
+Execute this plan using the `react-native-hifi:subagent-driven-development` skill.
 
 ## Context
 
@@ -13,7 +13,7 @@ Building a CLI tool that generates ASCII fractals. See `design.md` for full spec
 Create the Go module and directory structure.
 
 **Do:**
-- Initialize `go.mod` with module name `github.com/react-native-space-test/fractals`
+- Initialize `go.mod` with module name `github.com/react-native-hifi-test/fractals`
 - Create directory structure: `cmd/fractals/`, `internal/sierpinski/`, `internal/mandelbrot/`, `internal/cli/`
 - Create minimal `cmd/fractals/main.go` that prints "fractals cli"
 - Add `github.com/spf13/cobra` dependency
