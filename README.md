@@ -2,7 +2,7 @@
 
 React Native HiFi is a complete React Native & Expo development workflow for your coding agents, built on top of a set of composable "skills" and initial instructions that make sure your agent uses them.
 
-Inspired by and based on [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent.
+Built on [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent, with production skills from [Software Mansion](https://github.com/software-mansion-labs/skills) and [Callstack](https://github.com/callstackincubator/agent-skills).
 
 ## How it works
 
@@ -112,14 +112,15 @@ Start a new session in your chosen platform and ask for something that should tr
 - **expo-ui-jetpack-compose** - Build native Android UI with Jetpack Compose via Expo Modules
 - **expo-ui-swift-ui** - Build native iOS UI with SwiftUI via Expo Modules
 - **native-data-fetching** - Efficient data fetching patterns for React Native
+- **react-native-testing** - React Native Testing Library patterns (RNTL v13/v14), query strategies, async patterns, anti-patterns
 - **use-dom** - Use the `use dom` directive for web components in React Native
 - **agent-device** - Connect your coding agent to a physical or virtual device for testing
 
-### React Native Best Practices (Software Mansion)
+### Software Mansion Best Practices
 
-Production-grade patterns and guides from [software-mansion-labs/skills](https://github.com/software-mansion-labs/skills).
+Production-grade patterns and guides from [Software Mansion](https://github.com/software-mansion-labs/skills) for the New Architecture.
 
-- **software-mansion-best-practices** - Production patterns for React Native apps (routing table for sub-skills)
+- **software-mansion-best-practices** - Routing table for sub-skills covering:
   - **animations** - Reanimated 4, CSS transitions, layout animations, 120fps performance
   - **gestures** - Gesture Handler composition, tap handling, Reanimated patterns
   - **svg** - react-native-svg usage, animation patterns, decision guides
@@ -131,17 +132,17 @@ Production-grade patterns and guides from [software-mansion-labs/skills](https:/
   - **multimedia** - Media handling (stub)
   - **multithreading** - Threading patterns (stub)
 
-### React Native Best Practices (Callstack)
+### Callstack Best Practices
 
-Performance optimization guides from [callstackincubator/agent-skills](https://github.com/callstackincubator/agent-skills).
+Performance optimization and tooling from [Callstack](https://github.com/callstackincubator/agent-skills), based on "The Ultimate Guide to React Native Optimization".
 
-- **callstack-best-practices** - Performance optimization: FPS, TTI, bundle size, memory, profiling
-  - **js-*** - FPS measurement, React profiling, FlashList, atomic state, React Compiler, animations, bottom sheets, uncontrolled components, memory leaks, concurrent React
-  - **native-*** - Turbo Modules, native profiling (Xcode/Android Studio), TTI measurement, threading model, memory patterns, view flattening, Android 16kb alignment
-  - **bundle-*** - Bundle analysis, barrel exports, tree shaking, R8 shrinking, Hermes mmap, code splitting, native assets, library size evaluation
-- **upgrading-react-native** - Full RN upgrade workflow: Upgrade Helper diffs, dependency triage, Expo SDK steps, verification
-- **react-native-brownfield-migration** - Incremental adoption of React Native in existing native apps via @callstack/react-native-brownfield
-- **github-actions** - GitHub Actions workflow patterns for React Native simulator/emulator build artifacts
+- **callstack-best-practices** - Performance optimization with 29 reference files:
+  - **JS/React** - FPS measurement, React profiling, FlashList, atomic state (Jotai/Zustand), React Compiler, Reanimated worklets, bottom sheets, uncontrolled components, memory leaks, concurrent React
+  - **Native** - Turbo Modules, native profiling (Xcode Instruments/Android Studio), TTI measurement, threading model, memory patterns, view flattening, Android 16kb alignment
+  - **Bundling** - Bundle analysis (source-map-explorer), barrel exports, tree shaking, R8 shrinking, Hermes mmap, Re.Pack code splitting, native assets, library size evaluation
+- **upgrading-react-native** - Full RN upgrade workflow: rn-diff-purge template diffs, dependency triage, React 19 alignment, Expo SDK steps, monorepo targeting, verification checklists
+- **react-native-brownfield-migration** - Incremental adoption of React Native in existing native apps via @callstack/react-native-brownfield (XCFramework/AAR packaging, phased integration)
+- **github-actions** - GitHub Actions workflow patterns for React Native iOS simulator and Android emulator cloud builds with downloadable artifacts
 
 ### Meta
 
