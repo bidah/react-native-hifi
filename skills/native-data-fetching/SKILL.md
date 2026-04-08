@@ -453,11 +453,105 @@ queryClient.cancelQueries({ queryKey: ['search'] });
 queryClient.cancelQueries({ queryKey: ['search', 'react native'] });
 ```
 
+## On-Device Storage with react-native-mmkv
+
+Use `react-native-mmkv` instead of AsyncStorage for on-device key-value storage. MMKV is synchronous, ~30x faster, and built on WeChat's battle-tested C++ library.
+
+```bash
+npx expo install react-native-mmkv
+```
+
+### Basic Usage
+
+```tsx
+import { MMKV } from 'react-native-mmkv';
+
+const storage = new MMKV();
+
+// Write (synchronous)
+storage.set('user.name', 'Jane');
+storage.set('user.age', 28);
+storage.set('onboarded', true);
+
+// Read (synchronous)
+const name = storage.getString('user.name');    // 'Jane'
+const age = storage.getNumber('user.age');       // 28
+const onboarded = storage.getBoolean('onboarded'); // true
+
+// Delete
+storage.delete('user.name');
+
+// Check existence
+if (storage.contains('user.age')) { /* ... */ }
+
+// Clear all
+storage.clearAll();
+```
+
+### Storing Objects
+
+```tsx
+// MMKV stores primitives — serialize objects as JSON
+function setObject<T>(key: string, value: T) {
+  storage.set(key, JSON.stringify(value));
+}
+
+function getObject<T>(key: string): T | undefined {
+  const value = storage.getString(key);
+  return value ? JSON.parse(value) : undefined;
+}
+
+// Usage
+setObject('user.preferences', { theme: 'dark', language: 'en' });
+const prefs = getObject<{ theme: string; language: string }>('user.preferences');
+```
+
+### With Zustand (Persisted State)
+
+```tsx
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { MMKV } from 'react-native-mmkv';
+
+const storage = new MMKV();
+
+const mmkvStorage = {
+  getItem: (name: string) => storage.getString(name) ?? null,
+  setItem: (name: string, value: string) => storage.set(name, value),
+  removeItem: (name: string) => storage.delete(name),
+};
+
+const useSettingsStore = create(
+  persist(
+    (set) => ({
+      theme: 'light' as 'light' | 'dark',
+      setTheme: (theme: 'light' | 'dark') => set({ theme }),
+    }),
+    {
+      name: 'settings-storage',
+      storage: createJSONStorage(() => mmkvStorage),
+    },
+  ),
+);
+```
+
+### Encrypted Storage
+
+```tsx
+const secureStorage = new MMKV({
+  id: 'secure-storage',
+  encryptionKey: 'your-encryption-key',
+});
+```
+
+> **Note:** For authentication tokens and secrets, prefer `expo-secure-store` (uses iOS Keychain / Android EncryptedSharedPreferences). Use MMKV for app data, preferences, caches, and non-sensitive state.
+
 ## Common Mistakes
 
 | Mistake | Fix |
 |---------|-----|
 | Storing tokens in AsyncStorage | Use `expo-secure-store` for sensitive credentials |
+| Using AsyncStorage for app data | Use `react-native-mmkv` — synchronous, ~30x faster |
 | Setting `refetchOnWindowFocus: true` on mobile | Mobile apps don't have window focus events like web; set to `false` |
 | Not handling 401 token expiry | Implement token refresh in your fetch wrapper |
 | Fetching in `useEffect` without cleanup | Use React Query or AbortController to cancel on unmount |
@@ -479,4 +573,5 @@ queryClient.cancelQueries({ queryKey: ['search', 'react native'] });
 | Network status | `NetInfo.addEventListener` + `onlineManager` |
 | Cancel request | Pass `signal` from `queryFn` to `fetch` |
 | Invalidate cache | `queryClient.invalidateQueries({ queryKey })` |
+| Local storage | `MMKV` from `react-native-mmkv` (not AsyncStorage) |
 | Env variable | `process.env.EXPO_PUBLIC_API_URL` |
