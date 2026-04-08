@@ -137,9 +137,9 @@ After saving the plan, offer execution choice:
 
 **"Plan complete and saved to `docs/react-native-hifi/plans/<filename>.md`. Two execution options:**
 
-**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
+**1. Subagent-Driven (recommended)** — Spawns a separate agent for each task with a clean context. Two-stage review after each task (spec compliance, then code quality). Better for longer plans and parallel work. The main agent acts as supervisor/reviewer.
 
-**2. Inline Execution** - Execute tasks in this session using executing-plans, batch execution with checkpoints
+**2. Inline Execution** — Executes tasks in this session, same agent, same context. Runs in batches with human checkpoints between them. Better for shorter plans or when you want tighter control.
 
 **Which approach?"**
 
