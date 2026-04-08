@@ -131,9 +131,23 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
 
+## Testing Strategy
+
+Before offering execution options, ask the user about testing:
+
+**"Before we start executing — do you want to apply TDD (Test-Driven Development) with React Native Testing Library? This means every task writes a failing test first, then implements the code to make it pass.**
+
+**1. Yes, full TDD** — Every task follows RED-GREEN-REFACTOR. Tests written before implementation code.
+
+**2. No tests for now** — Skip testing, focus on implementation only.
+
+**Which approach?"**
+
+Store the user's choice. If TDD is chosen, all tasks in the plan must include test requirements and subagents will be instructed to invoke `react-native-hifi:test-driven-development` before writing any code.
+
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+After the testing strategy is confirmed, offer execution choice:
 
 **"Plan complete and saved to `docs/react-native-hifi/plans/<filename>.md`. Two execution options:**
 

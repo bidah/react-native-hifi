@@ -29,8 +29,8 @@ Task tool (general-purpose):
     ## Your Job
 
     Once you're clear on requirements:
-    1. Implement exactly what the task specifies
-    2. Write tests (following TDD if task says to)
+    1. If TDD is enabled: invoke react-native-hifi:test-driven-development and follow RED-GREEN-REFACTOR — write a failing test first, verify it fails, then write minimal code to pass, verify it passes, refactor. Use React Native Testing Library.
+    2. If TDD is not enabled: implement exactly what the task specifies without tests.
     3. Verify implementation works
     4. Commit your work
     5. Self-review (see below)
