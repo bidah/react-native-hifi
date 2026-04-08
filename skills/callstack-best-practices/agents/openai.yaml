@@ -1,0 +1,4 @@
+interface:
+  display_name: "React Native Best Practices"
+  short_description: "React Native performance optimization guide"
+  default_prompt: "Use $callstack-best-practices to diagnose and improve React Native performance."

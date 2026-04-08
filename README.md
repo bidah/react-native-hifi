@@ -119,7 +119,7 @@ Start a new session in your chosen platform and ask for something that should tr
 
 Production-grade patterns and guides from [software-mansion-labs/skills](https://github.com/software-mansion-labs/skills).
 
-- **react-native-best-practices** - Production patterns for React Native apps (routing table for sub-skills)
+- **software-mansion-best-practices** - Production patterns for React Native apps (routing table for sub-skills)
   - **animations** - Reanimated 4, CSS transitions, layout animations, 120fps performance
   - **gestures** - Gesture Handler composition, tap handling, Reanimated patterns
   - **svg** - react-native-svg usage, animation patterns, decision guides
@@ -130,6 +130,18 @@ Production-grade patterns and guides from [software-mansion-labs/skills](https:/
   - **haptics** - Haptic feedback patterns (stub)
   - **multimedia** - Media handling (stub)
   - **multithreading** - Threading patterns (stub)
+
+### React Native Best Practices (Callstack)
+
+Performance optimization guides from [callstackincubator/agent-skills](https://github.com/callstackincubator/agent-skills).
+
+- **callstack-best-practices** - Performance optimization: FPS, TTI, bundle size, memory, profiling
+  - **js-*** - FPS measurement, React profiling, FlashList, atomic state, React Compiler, animations, bottom sheets, uncontrolled components, memory leaks, concurrent React
+  - **native-*** - Turbo Modules, native profiling (Xcode/Android Studio), TTI measurement, threading model, memory patterns, view flattening, Android 16kb alignment
+  - **bundle-*** - Bundle analysis, barrel exports, tree shaking, R8 shrinking, Hermes mmap, code splitting, native assets, library size evaluation
+- **upgrading-react-native** - Full RN upgrade workflow: Upgrade Helper diffs, dependency triage, Expo SDK steps, verification
+- **react-native-brownfield-migration** - Incremental adoption of React Native in existing native apps via @callstack/react-native-brownfield
+- **github-actions** - GitHub Actions workflow patterns for React Native simulator/emulator build artifacts
 
 ### Meta
 
