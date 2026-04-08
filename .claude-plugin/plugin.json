@@ -3,11 +3,11 @@
   "description": "React Native & Expo development workflow: skills library for Claude Code with TDD, debugging, collaboration patterns, and proven techniques",
   "version": "5.0.2",
   "author": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "Rodrigo Figueroa",
+    "url": "https://github.com/bidah"
   },
-  "homepage": "https://github.com/react-native-vibe-code/react-native-hifi",
-  "repository": "https://github.com/react-native-vibe-code/react-native-hifi",
+  "homepage": "https://github.com/bidah/react-native-hifi",
+  "repository": "https://github.com/bidah/react-native-hifi",
   "license": "MIT",
   "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows", "react-native", "expo"]
 }

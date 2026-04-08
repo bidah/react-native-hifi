@@ -7,7 +7,7 @@ Guide for using React Native HiFi with OpenAI Codex via native skill discovery.
 Tell Codex:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/react-native-hifi/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/bidah/react-native-hifi/refs/heads/main/.codex/INSTALL.md
 ```
 
 ## Manual Installation
@@ -21,7 +21,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/r
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/react-native-vibe-code/react-native-hifi.git ~/.codex/react-native-hifi
+   git clone https://github.com/bidah/react-native-hifi.git ~/.codex/react-native-hifi
    ```
 
 2. Create the skills symlink:
@@ -122,5 +122,5 @@ Junctions normally work without special permissions. If creation fails, try runn
 
 ## Getting Help
 
-- Report issues: https://github.com/react-native-vibe-code/react-native-hifi/issues
-- Main documentation: https://github.com/react-native-vibe-code/react-native-hifi
+- Report issues: https://github.com/bidah/react-native-hifi/issues
+- Main documentation: https://github.com/bidah/react-native-hifi

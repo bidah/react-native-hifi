@@ -2,8 +2,8 @@
   "name": "react-native-hifi-dev",
   "description": "Development marketplace for React Native HiFi skills library",
   "owner": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "Rodrigo Figueroa",
+    "url": "https://github.com/bidah"
   },
   "plugins": [
     {
@@ -12,8 +12,8 @@
       "version": "5.0.2",
       "source": "./",
       "author": {
-        "name": "Jesse Vincent",
-        "email": "jesse@fsck.com"
+        "name": "Rodrigo Figueroa",
+        "url": "https://github.com/bidah"
       }
     }
   ]

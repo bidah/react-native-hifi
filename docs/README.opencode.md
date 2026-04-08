@@ -7,7 +7,7 @@ Complete guide for using React Native HiFi with [OpenCode.ai](https://opencode.a
 Tell OpenCode:
 
 ```
-Clone https://github.com/react-native-vibe-code/react-native-hifi to ~/.config/opencode/react-native-hifi, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/react-native-hifi/.opencode/plugins/react-native-hifi.js to ~/.config/opencode/plugins/react-native-hifi.js, then symlink ~/.config/opencode/react-native-hifi/skills to ~/.config/opencode/skills/react-native-hifi, then restart opencode.
+Clone https://github.com/bidah/react-native-hifi to ~/.config/opencode/react-native-hifi, then create directory ~/.config/opencode/plugins, then symlink ~/.config/opencode/react-native-hifi/.opencode/plugins/react-native-hifi.js to ~/.config/opencode/plugins/react-native-hifi.js, then symlink ~/.config/opencode/react-native-hifi/skills to ~/.config/opencode/skills/react-native-hifi, then restart opencode.
 ```
 
 ## Manual Installation
@@ -24,7 +24,7 @@ Clone https://github.com/react-native-vibe-code/react-native-hifi to ~/.config/o
 if [ -d ~/.config/opencode/react-native-hifi ]; then
   cd ~/.config/opencode/react-native-hifi && git pull
 else
-  git clone https://github.com/react-native-vibe-code/react-native-hifi.git ~/.config/opencode/react-native-hifi
+  git clone https://github.com/bidah/react-native-hifi.git ~/.config/opencode/react-native-hifi
 fi
 
 # 2. Create directories
@@ -66,7 +66,7 @@ Run as Administrator, or with Developer Mode enabled:
 
 ```cmd
 :: 1. Install React Native HiFi
-git clone https://github.com/react-native-vibe-code/react-native-hifi.git "%USERPROFILE%\.config\opencode\react-native-hifi"
+git clone https://github.com/bidah/react-native-hifi.git "%USERPROFILE%\.config\opencode\react-native-hifi"
 
 :: 2. Create directories
 mkdir "%USERPROFILE%\.config\opencode\plugins" 2>nul
@@ -91,7 +91,7 @@ Run as Administrator, or with Developer Mode enabled:
 
 ```powershell
 # 1. Install React Native HiFi
-git clone https://github.com/react-native-vibe-code/react-native-hifi.git "$env:USERPROFILE\.config\opencode\react-native-hifi"
+git clone https://github.com/bidah/react-native-hifi.git "$env:USERPROFILE\.config\opencode\react-native-hifi"
 
 # 2. Create directories
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.config\opencode\plugins"
@@ -116,7 +116,7 @@ Note: Git Bash's native `ln` command copies files instead of creating symlinks. 
 
 ```bash
 # 1. Install React Native HiFi
-git clone https://github.com/react-native-vibe-code/react-native-hifi.git ~/.config/opencode/react-native-hifi
+git clone https://github.com/bidah/react-native-hifi.git ~/.config/opencode/react-native-hifi
 
 # 2. Create directories
 mkdir -p ~/.config/opencode/plugins ~/.config/opencode/skills
@@ -308,8 +308,8 @@ If you see `Cannot find module` errors on Windows:
 
 ## Getting Help
 
-- Report issues: https://github.com/react-native-vibe-code/react-native-hifi/issues
-- Main documentation: https://github.com/react-native-vibe-code/react-native-hifi
+- Report issues: https://github.com/bidah/react-native-hifi/issues
+- Main documentation: https://github.com/bidah/react-native-hifi
 - OpenCode docs: https://opencode.ai/docs/
 
 ## Testing

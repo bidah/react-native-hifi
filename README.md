@@ -18,38 +18,43 @@ On top of the core workflow, React Native HiFi includes specialized skills for E
 
 ## Installation
 
-**Note:** Installation differs by platform. Claude Code or Cursor have built-in plugin marketplaces. Codex and OpenCode require manual setup.
+**Note:** Installation differs by platform. Pick your platform below.
 
-### Claude Code (via Plugin Marketplace)
+### Claude Code
 
-In Claude Code, register the marketplace first:
-
-```bash
-/plugin marketplace add rofi-rofi/react-native-hifi-marketplace
-```
-
-Then install the plugin from this marketplace:
+Clone the repo and install as a local plugin:
 
 ```bash
-/plugin install react-native-hifi@react-native-hifi-marketplace
+git clone https://github.com/bidah/react-native-hifi.git ~/.claude/plugins/react-native-hifi
+claude plugin install ~/.claude/plugins/react-native-hifi
 ```
 
-### Cursor (via Plugin Marketplace)
+To update:
 
-In Cursor Agent chat, install from marketplace:
-
-```text
-/add-plugin react-native-hifi
+```bash
+cd ~/.claude/plugins/react-native-hifi && git pull
 ```
 
-or search for "react-native-hifi" in the plugin marketplace.
+### Cursor
+
+Add React Native HiFi skills to your project by cloning into your workspace:
+
+```bash
+git clone https://github.com/bidah/react-native-hifi.git .react-native-hifi
+```
+
+Then add to your `.cursorrules` file:
+
+```
+When working on React Native or Expo projects, read and follow the skills in .react-native-hifi/skills/. Before any task, check if a relevant skill exists by reading .react-native-hifi/skills/using-react-native-hifi/SKILL.md first.
+```
 
 ### Codex
 
 Tell Codex:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/react-native-hifi/refs/heads/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/bidah/react-native-hifi/refs/heads/main/.codex/INSTALL.md
 ```
 
 **Detailed docs:** [docs/README.codex.md](docs/README.codex.md)
@@ -59,7 +64,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/r
 Tell OpenCode:
 
 ```
-Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/react-native-hifi/refs/heads/main/.opencode/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/bidah/react-native-hifi/refs/heads/main/.opencode/INSTALL.md
 ```
 
 **Detailed docs:** [docs/README.opencode.md](docs/README.opencode.md)
@@ -67,7 +72,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/rofi-rofi/r
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/react-native-vibe-code/react-native-hifi
+gemini extensions install https://github.com/bidah/react-native-hifi
 ```
 
 To update:
@@ -190,10 +195,10 @@ See `skills/writing-skills/SKILL.md` for the complete guide.
 
 ## Updating
 
-Skills update automatically when you update the plugin:
+Update by pulling the latest changes:
 
 ```bash
-/plugin update react-native-hifi
+cd ~/.claude/plugins/react-native-hifi && git pull
 ```
 
 ## License

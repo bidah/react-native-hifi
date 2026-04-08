@@ -10,7 +10,7 @@ Enable react-native-hifi skills in Codex via native skill discovery. Just clone 
 
 1. **Clone the react-native-hifi repository:**
    ```bash
-   git clone https://github.com/react-native-vibe-code/react-native-hifi.git ~/.codex/react-native-hifi
+   git clone https://github.com/bidah/react-native-hifi.git ~/.codex/react-native-hifi
    ```
 
 2. **Create the skills symlink:**

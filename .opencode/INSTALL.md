@@ -10,7 +10,7 @@
 ### 1. Clone React Native HiFi
 
 ```bash
-git clone https://github.com/react-native-vibe-code/react-native-hifi.git ~/.config/opencode/react-native-hifi
+git clone https://github.com/bidah/react-native-hifi.git ~/.config/opencode/react-native-hifi
 ```
 
 ### 2. Register the Plugin
@@ -115,5 +115,5 @@ When skills reference Claude Code tools:
 
 ## Getting Help
 
-- Report issues: https://github.com/react-native-vibe-code/react-native-hifi/issues
-- Full documentation: https://github.com/react-native-vibe-code/react-native-hifi/blob/main/docs/README.opencode.md
+- Report issues: https://github.com/bidah/react-native-hifi/issues
+- Full documentation: https://github.com/bidah/react-native-hifi/blob/main/docs/README.opencode.md
