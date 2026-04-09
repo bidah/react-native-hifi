@@ -29,16 +29,6 @@ Register the marketplace, then install:
 /plugin install react-native-hifi@react-native-hifi-marketplace
 ```
 
-### Cursor
-
-In Cursor Agent chat, install from marketplace:
-
-```text
-/add-plugin react-native-hifi
-```
-
-or search for "react-native-hifi" in the plugin marketplace.
-
 ### Codex
 
 Tell Codex:
